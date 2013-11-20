@@ -3,3 +3,4 @@
 require:
     - play
     - com.google.guava -> guava 15.0
+    - play -> morphia
