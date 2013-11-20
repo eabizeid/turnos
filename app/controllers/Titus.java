@@ -1,17 +1,13 @@
 package controllers;
 
 import java.util.List;
-import java.util.Map;
+
+import models.Component;
+import play.modules.morphia.Model.MorphiaQuery;
+import play.mvc.Controller;
 
 import com.google.common.collect.Lists;
 
-import models.Component;
-import play.modules.morphia.Model;
-import play.modules.morphia.Model.MorphiaQuery;
-import play.mvc.Controller;
-import play.mvc.With;
-
-@With(Secure.class)
 public class Titus extends Controller {
 	public static void search() {
         render();
