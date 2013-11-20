@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>#{get 'title' /}</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/bootstrap.css'}">
+         <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/DT_bootstrap.css'}">
+        <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
+        #{get 'moreStyles' /}
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+        <script src="@{'/public/javascripts/jquery-1.6.4.min.js'}" type="text/javascript" charset="utf-8"></script>
+        <script src="@{'/public/javascripts/jquery.dataTables.js'}" type="text/javascript" charset="utf-8"></script>
+        #{get 'moreScripts' /}
+    </head>
+    <body>
+    	<div id="header">
+  			<h1><a href="#">Titus Intelligence</a></h1>
+  			<ul id="menu">
+    			<li class="active"><a href="#">About Titus</a></li>
+    			<li><a href="#">Sign up</a></li>
+    			<li><a href="/login">log in</a></li>
+    			<li><a href="#">Help</a></li>
+    			<li><a href="#">Contact</a></li>
+  			</ul>
+		</div>
+        #{doLayout /}
+    </body>
+</html>
