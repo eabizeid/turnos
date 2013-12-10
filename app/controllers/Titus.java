@@ -46,15 +46,15 @@ public class Titus extends Controller {
 			for(String parameter : parameters) {
 				String[] split = parameter.split("=");
 				if (split[0].equals("marca")) {
-					criteria.add(Component.createQuery().criteria("marca").contains(split[1]));
+					criteria.add(Component.createQuery().criteria("marca").containsIgnoreCase(split[1]));
 				} else if (split[0].equals("modelo")) {
-					criteria.add(Component.createQuery().criteria("modelo").contains(split[1]));
+					criteria.add(Component.createQuery().criteria("modelo").containsIgnoreCase(split[1]));
 				} else if (split[0].equals("submodelo")) {
-					criteria.add(Component.createQuery().criteria("submodelo").contains(split[1]));
+					criteria.add(Component.createQuery().criteria("submodelo").containsIgnoreCase(split[1]));
 				} else if (split[0].equals("tipo")) {
-					criteria.add(Component.createQuery().criteria("tipo").contains(split[1]));
+					criteria.add(Component.createQuery().criteria("tipo").containsIgnoreCase(split[1]));
 				} else if (split[0].equals("parte")) {
-					criteria.add(Component.createQuery().criteria("parte").contains(split[1]));
+					criteria.add(Component.createQuery().criteria("parte").containsIgnoreCase(split[1]));
 				}
 				
 			}
