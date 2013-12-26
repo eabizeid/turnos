@@ -1,32 +1,24 @@
 package controllers;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import models.Component;
 import models.Pending;
-import play.modules.morphia.Model;
-import play.modules.morphia.MorphiaPlugin;
+
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
+
+import play.libs.Mail;
 import play.modules.morphia.Model.MorphiaQuery;
+import play.modules.morphia.MorphiaPlugin;
 import play.mvc.Controller;
-import play.mvc.results.Result;
 import service.feeder.FileFeeder;
 
 import com.google.code.morphia.query.Criteria;
 import com.google.code.morphia.query.CriteriaContainer;
 import com.google.code.morphia.query.Query;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.ning.http.multipart.FilePart;
 
 public class Titus extends Controller {
 	public static void search() {
@@ -37,27 +29,22 @@ public class Titus extends Controller {
         render(components);
     }
 	
-	public static void makeASearch(String query) {
+	public static void makeASearch(String marca, String modelo, String submodelo, String tipo, String nroDeParte) {
 		List<Component> components = Lists.newArrayList();
-		String[] parameters = query.split(" ");
 		try {
 			Query<Component> q = MorphiaPlugin.ds().find(Component.class);
 			List<Criteria> criteria = Lists.newArrayList();
-			for(String parameter : parameters) {
-				String[] split = parameter.split("=");
-				if (split[0].equals("marca")) {
-					criteria.add(Component.createQuery().criteria("marca").containsIgnoreCase(split[1]));
-				} else if (split[0].equals("modelo")) {
-					criteria.add(Component.createQuery().criteria("modelo").containsIgnoreCase(split[1]));
-				} else if (split[0].equals("submodelo")) {
-					criteria.add(Component.createQuery().criteria("submodelo").containsIgnoreCase(split[1]));
-				} else if (split[0].equals("tipo")) {
-					criteria.add(Component.createQuery().criteria("tipo").containsIgnoreCase(split[1]));
-				} else if (split[0].equals("parte")) {
-					criteria.add(Component.createQuery().criteria("parte").containsIgnoreCase(split[1]));
-				}
+			if (marca != null && !marca.isEmpty())
+				criteria.add(Component.createQuery().criteria("marca").containsIgnoreCase(marca));
+			if (modelo != null && !modelo.isEmpty())
+				criteria.add(Component.createQuery().criteria("modelo").containsIgnoreCase(modelo));
+			if (submodelo != null && !submodelo.isEmpty())
+				criteria.add(Component.createQuery().criteria("submodelo").containsIgnoreCase(submodelo));
+			if (tipo != null && !tipo.isEmpty())
+				criteria.add(Component.createQuery().criteria("tipo").containsIgnoreCase(tipo));
+			if (nroDeParte != null && !nroDeParte.isEmpty())
+				criteria.add(Component.createQuery().criteria("nroDeParte").containsIgnoreCase(nroDeParte));
 				
-			}
 			CriteriaContainer[] andCriteria = criteria.toArray(new CriteriaContainer[criteria.size()]); 
 
 			MorphiaQuery q2 = Component.q();
@@ -67,6 +54,8 @@ public class Titus extends Controller {
 			e.printStackTrace();
 		}
 		if (components.isEmpty()) {
+			String query = "marca = ".concat(marca).concat(" modelo = ").concat(modelo).concat(" submodelo = ")
+					.concat(submodelo).concat("tipo = ").concat(tipo).concat("nroDeParte = ").concat(nroDeParte);
 			MorphiaQuery find = Pending.find("byQuestion", query);
 			List<Pending> pendings = find.asList();
 			Pending pending = new Pending();
@@ -76,6 +65,17 @@ public class Titus extends Controller {
 			}
 			pending.question = query;
 			pending.save();
+			SimpleEmail email = new SimpleEmail();
+			try {
+				email.setFrom("titus@titus.com.ar");
+				email.addTo("eduardo.abizeid@gmail.com");
+				email.setSubject("You have a new pending");
+				email.setMsg(query);
+			} catch (EmailException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Mail.send(email);
 		}
 			
 		render("Titus/search.html", components);
@@ -107,6 +107,11 @@ public class Titus extends Controller {
 			e.printStackTrace();
 		}
 		pendings();
+	}
+	
+	public static void viewDetail(String componentId) {
+		Component component = Component.findById(Long.valueOf(componentId));
+		render(component);
 	}
 
 }

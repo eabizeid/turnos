@@ -112,6 +112,16 @@ $(document).ready(function() {
 	} );
 } );
 
+openDetail = function(componentId) {
+	
+	  var action = #{jsAction @viewDetail(':componentId') /}
+
+	   $.post(action({componentId: componentId}), function(data) {
+          $("#componentDetail").append(data);
+	   });
+	  
+	  
+}
 
 </script>
 <div id="teaser">
@@ -127,13 +137,27 @@ $(document).ready(function() {
 <div class="wrap">
   <div class="search">
     <h3>Make a <span class="red">Search </span></h3>
-    		#{form @Titus.makeASearch(), class:"form-horizontal form-inline" }
+    		#{form @Titus.makeASearch() }
 				<div class="form-group">
-    				<p><label class="sr-only" for="query">Attributes</label>
-    				<input type="text" class="form-control" id="query" placeholder="type a search expression" name="query" >
-				    <button type="submit" class="btn btn-default">do it!</button>
-				    </p>
+    				<label class="sr-only" for="marca">Marca
+    				</label>
+    				<input type="text" class="form-control" id="marca" placeholder="marca" name="marca" >
+    				<label class="sr-only" for="modelo">Modelo
+    				</label>
+    				<input type="text" class="form-control" id="modelo" placeholder="type a search expression" name="modelo" >
 				</div>
+				<div class="form-group">
+    				<label class="sr-only" for="submodelo">Submodelo
+    				</label>
+    				<input type="text" class="form-control" id="submodelo" placeholder="type a search expression" name="submodelo" >
+    				<label class="sr-only" for="tipo">Tipo
+    				</label>
+    				<input type="text" class="form-control" id="tipo" placeholder="type a search expression" name="tipo" >
+    			</div>
+    				<label class="sr-only" for="nroDeParte">Nro de parte
+    				<input type="text" class="form-control" id="nroDeParte" placeholder="type a search expression" name="nroDeParte" >
+    				</label>
+				    <button type="submit" class="btn btn-large btn-primary">do it!</button>
 			#{/form}
   </div>
 </div>
@@ -148,6 +172,7 @@ $(document).ready(function() {
   				<th>Modelo</th>
   				<th>Submodelo</th>
   				<th>Nro de parte</th>
+  				<th></th>
   			</tr>
   		</thead>
   		<tbody>
@@ -158,10 +183,24 @@ $(document).ready(function() {
   					<td>${component.modelo}</td>
   					<td>${component.submodelo}</td>
   					<td>${component.nroDeParte}</td>
+  					<td><button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" onclick="javascript: openDetail(${component.id});">Ver</button></td>
   				</tr>
   			#{/list}
   		</tbody>
 	</table>
+  </div>
+  <div class="modal fade" id="myModal" style="width: 50%; left: 40%;" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Detalle de producto</h4>
+	      </div>
+	      <div class="modal-body">
+  			<div id="componentDetail"></div>
+  		  </div>
+  		</div>
+  	</div>
   </div>
   #{/if}
 <div id="footer">
