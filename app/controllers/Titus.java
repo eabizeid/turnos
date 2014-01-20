@@ -6,6 +6,7 @@ import java.util.List;
 import models.Component;
 import models.Pending;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
@@ -22,6 +23,7 @@ import com.google.common.collect.Lists;
 
 public class Titus extends Controller {
 	public static void search() {
+		renderArgs.put("step", 1);
         render();
     }
 	
@@ -38,13 +40,7 @@ public class Titus extends Controller {
 				criteria.add(Component.createQuery().criteria("marca").containsIgnoreCase(marca));
 			if (modelo != null && !modelo.isEmpty())
 				criteria.add(Component.createQuery().criteria("modelo").containsIgnoreCase(modelo));
-			if (submodelo != null && !submodelo.isEmpty())
-				criteria.add(Component.createQuery().criteria("submodelo").containsIgnoreCase(submodelo));
-			if (tipo != null && !tipo.isEmpty())
-				criteria.add(Component.createQuery().criteria("tipo").containsIgnoreCase(tipo));
-			if (nroDeParte != null && !nroDeParte.isEmpty())
-				criteria.add(Component.createQuery().criteria("nroDeParte").containsIgnoreCase(nroDeParte));
-				
+		
 			CriteriaContainer[] andCriteria = criteria.toArray(new CriteriaContainer[criteria.size()]); 
 
 			MorphiaQuery q2 = Component.q();
@@ -53,34 +49,47 @@ public class Titus extends Controller {
 		} catch( Exception e) {
 			e.printStackTrace();
 		}
+		String query = StringUtils.EMPTY;
 		if (components.isEmpty()) {
-			String query = "marca = ".concat(marca).concat(" modelo = ").concat(modelo).concat(" submodelo = ")
-					.concat(submodelo).concat("tipo = ").concat(tipo).concat("nroDeParte = ").concat(nroDeParte);
-			MorphiaQuery find = Pending.find("byQuestion", query);
-			List<Pending> pendings = find.asList();
-			Pending pending = new Pending();
-			if (!pendings.isEmpty()) {
-				pending = pendings.get(0);
-				pending.quantity++;
+			if (modelo != null && !modelo.isEmpty()) {
+				query = "modelo = ".concat(modelo);
 			}
-			pending.question = query;
-			pending.save();
-			SimpleEmail email = new SimpleEmail();
-			try {
-				email.setFrom("titus@titus.com.ar");
-				email.addTo("eduardo.abizeid@gmail.com");
-				email.setSubject("You have a new pending");
-				email.setMsg(query);
-			} catch (EmailException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (marca != null && !marca.isEmpty()) {
+				query.concat("marca = ").concat(marca);
 			}
-			Mail.send(email);
 		}
-			
+		renderArgs.put("query", query);
+		renderArgs.put("step", 2);
 		render("Titus/search.html", components);
     }
 	
+	public static void noResults(String mail, String query) {
+		MorphiaQuery find = Pending.find("byQuestion", query);
+		List<Pending> pendings = find.asList();
+		Pending pending = new Pending();
+		if (!pendings.isEmpty()) {
+			pending = pendings.get(0);
+			pending.quantity++;
+		}
+		pending.mails.add(mail);
+		pending.question = query;
+		pending.save();
+		SimpleEmail email = new SimpleEmail();
+		try {
+			email.setFrom("titus@titus.com.ar");
+			email.addTo("eduardo.abizeid@gmail.com");
+			email.setSubject("You have a new pending");
+			email.setMsg(query.concat("\n").concat("Cliente: ".concat(mail)));
+		} catch (EmailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Mail.send(email);
+		
+		flash.success("Muchas Gracias!");
+		render("Titus/search.html");
+		
+	}
 	
 	public static void toFeed() {
         render();
@@ -102,7 +111,25 @@ public class Titus extends Controller {
 	public static void resolvePending(Component component, String pendingToResolve) {
 		try { 
 			component.save();
+			Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
+			for (String mail : pending.mails) {
+				
+				SimpleEmail email = new SimpleEmail();
+				try {
+					email.setFrom("titus@titus.com.ar");
+					email.addTo(mail);
+					email.setSubject("We have a result for you");
+					email.setMsg("Resuelto");
+				} catch (EmailException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Mail.send(email);
+				
+			}
 			Pending.findById(Long.valueOf(pendingToResolve)).delete();
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

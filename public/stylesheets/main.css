@@ -1,5 +1,14 @@
+@import url(http://fonts.googleapis.com/css?family=Krona+One);
+
+@import url(http://fonts.googleapis.com/css?family=Chango);
+
+@import url(http://fonts.googleapis.com/css?family=Monoton);
+
+@import url(http://fonts.googleapis.com/css?family=Cherry+Cream+Soda);
+
+
 *{ margin: 0; padding: 0; }*
-body { margin: 50px 0 0; background: #fff; font: .74em "Trebuchet MS", Arial, Sans-Serif; color: #444; }
+body {  margin: 50px 0 0; background: #fff; font: 14px "Trebuchet MS", Arial, Sans-Serif;  color: #444; }
 	h1 { font-size: 3em; font-weight: normal; float: left; }
 	h1 a { text-decoration: none; }
 	h2 { font-size: 2em; color: #990080; font-weight: normal; margin: 0 0 .8em; }
@@ -9,10 +18,20 @@ body { margin: 50px 0 0; background: #fff; font: .74em "Trebuchet MS", Arial, Sa
 	a { color: #9D2900; }
 	a:hover { color: #A0000E; text-decoration: none; }
 	img { border: 0; }
-	.red { color: #9D2900; }
-	
+	.red { color: #9D2900; 
+	}
+input[type="text"] {
+	height: 50px;
+	font-size: 2em;
+}
+
 .wrap { width: 900px; margin: 0 auto; }
  
+button {
+	font-family: 'Chelsea Market', sans-serif;
+}
+
+
 #header { width: 900px; height: 50px; margin: 0 auto; }
 	#menu  { float: right; padding: 6px 0 0 0; list-style: none; }
 		#menu li { display: inline; }
