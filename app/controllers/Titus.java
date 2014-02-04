@@ -4,58 +4,49 @@ import java.io.File;
 import java.util.List;
 
 import models.Component;
+import models.ComponentModel;
+import models.ComponentTrademark;
+import models.ComponentType;
+import models.Mail;
 import models.Pending;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
-import play.libs.Mail;
-import play.modules.morphia.Model.MorphiaQuery;
-import play.modules.morphia.MorphiaPlugin;
 import play.mvc.Controller;
 import service.feeder.FileFeeder;
 
-import com.google.code.morphia.query.Criteria;
-import com.google.code.morphia.query.CriteriaContainer;
-import com.google.code.morphia.query.Query;
 import com.google.common.collect.Lists;
 
 public class Titus extends Controller {
+	
 	public static void search() {
+		renderArgs.put("trademarks", ComponentTrademark.findAll());
+		renderArgs.put("types", ComponentType.findAll());
+		renderArgs.put("allModels", ComponentModel.findAll());
 		renderArgs.put("step", 1);
         render();
     }
 	
-	public static void search(List<Component> components) {
-        render(components);
-    }
 	
-	public static void makeASearch(String marca, String modelo, String submodelo, String tipo, String nroDeParte) {
+	public static void makeASearch(String trademark, String model, String type) {
 		List<Component> components = Lists.newArrayList();
 		try {
-			Query<Component> q = MorphiaPlugin.ds().find(Component.class);
-			List<Criteria> criteria = Lists.newArrayList();
-			if (marca != null && !marca.isEmpty())
-				criteria.add(Component.createQuery().criteria("marca").containsIgnoreCase(marca));
-			if (modelo != null && !modelo.isEmpty())
-				criteria.add(Component.createQuery().criteria("modelo").containsIgnoreCase(modelo));
-		
-			CriteriaContainer[] andCriteria = criteria.toArray(new CriteriaContainer[criteria.size()]); 
-
-			MorphiaQuery q2 = Component.q();
-			q2.and(andCriteria);
-			components = q2.asList();
+			
+			components = Component.find("select c from Component c, " +
+					"ComponentModel m, ComponentSubmodel s, ComponentType t " +
+					"where m.description = ? and s.description = ? and t.description = ? ", trademark, model, type).fetch();
 		} catch( Exception e) {
 			e.printStackTrace();
 		}
 		String query = StringUtils.EMPTY;
 		if (components.isEmpty()) {
-			if (modelo != null && !modelo.isEmpty()) {
-				query = "modelo = ".concat(modelo);
+			if (model != null && !model.isEmpty()) {
+				query = "modelo = ".concat(model);
 			}
-			if (marca != null && !marca.isEmpty()) {
-				query.concat("marca = ").concat(marca);
+			if (trademark != null && !trademark.isEmpty()) {
+				query.concat("marca = ").concat(trademark);
 			}
 		}
 		renderArgs.put("query", query);
@@ -64,14 +55,15 @@ public class Titus extends Controller {
     }
 	
 	public static void noResults(String mail, String query) {
-		MorphiaQuery find = Pending.find("byQuestion", query);
-		List<Pending> pendings = find.asList();
+		List<Pending> pendings = Pending.find("byQuestion", query).fetch();
 		Pending pending = new Pending();
 		if (!pendings.isEmpty()) {
 			pending = pendings.get(0);
 			pending.quantity++;
 		}
-		pending.mails.add(mail);
+		Mail m = new models.Mail();
+		m.mail = mail;
+		pending.mails.add(m);
 		pending.question = query;
 		pending.save();
 		SimpleEmail email = new SimpleEmail();
@@ -84,7 +76,7 @@ public class Titus extends Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Mail.send(email);
+		play.libs.Mail.send(email);
 		
 		flash.success("Muchas Gracias!");
 		render("Titus/search.html");
@@ -112,22 +104,22 @@ public class Titus extends Controller {
 		try { 
 			component.save();
 			Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
-			for (String mail : pending.mails) {
+			for (Mail mail : pending.mails) {
 				
 				SimpleEmail email = new SimpleEmail();
 				try {
 					email.setFrom("titus@titus.com.ar");
-					email.addTo(mail);
+					email.addTo(mail.mail);
 					email.setSubject("We have a result for you");
 					email.setMsg("Resuelto");
 				} catch (EmailException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Mail.send(email);
+				play.libs.Mail.send(email);
 				
 			}
-			Pending.findById(Long.valueOf(pendingToResolve)).delete();
+			((Pending)Pending.findById(Long.valueOf(pendingToResolve))).delete();
 			
 			
 		} catch (Exception e) {

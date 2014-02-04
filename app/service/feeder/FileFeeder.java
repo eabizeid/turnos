@@ -16,8 +16,6 @@ import org.apache.poi.ss.formula.SheetNameFormatter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import play.modules.morphia.Model;
-import play.modules.morphia.Model.MorphiaQuery;
 
 public class FileFeeder {
 
@@ -39,45 +37,45 @@ public class FileFeeder {
 	}
 
 	private static void process(Row row) {
-		if (row.getRowNum() > 0 ) {
-			Component component = new Component();
-			for (Iterator cellIterator = row.iterator(); cellIterator.hasNext();) {
-				Cell cell = (Cell)cellIterator.next();
-				switch (cell.getColumnIndex()) {
-				case 3 :
-					component.nroDeParte = getValueOfCell(cell);
-					break;
-				case 4:
-					component.marca =  getValueOfCell(cell);
-					break;
-				case 5:
-					component.modelo =  getValueOfCell(cell);
-					break;
-				case 6:
-					component.submodelo =  getValueOfCell(cell);
-					break;
-				case 7:
-					component.tipo =  getValueOfCell(cell);
-				default:
-					break;
-				}
-			}
-			MorphiaQuery q = Component.createQuery();
-			
-			String marca = component.marca != null ? component.marca :StringUtils.EMPTY;
-			String modelo = component.modelo != null ? component.modelo :StringUtils.EMPTY;
-			String submodelo = component.submodelo != null ? component.submodelo :StringUtils.EMPTY;
-			String tipo = component.tipo != null ? component.tipo :StringUtils.EMPTY;
-			String nroDeParte = component.nroDeParte != null ? component.nroDeParte :StringUtils.EMPTY;
-			
-			q.and(q.criteria("marca").contains(marca), q.criteria("modelo").contains(modelo),
-					q.criteria("submodelo").contains(submodelo ), q.criteria("tipo").contains(tipo),
-					q.criteria("nroDeParte").contains(nroDeParte));
-			List<Model> components = q.asList();
-			if (components == null || components.isEmpty()) {
-				component.save();
-			}
-		}
+//		if (row.getRowNum() > 0 ) {
+//			Component component = new Component();
+//			for (Iterator cellIterator = row.iterator(); cellIterator.hasNext();) {
+//				Cell cell = (Cell)cellIterator.next();
+//				switch (cell.getColumnIndex()) {
+//				case 3 :
+//					component.nroDeParte = getValueOfCell(cell);
+//					break;
+//				case 4:
+//					component.marca =  getValueOfCell(cell);
+//					break;
+//				case 5:
+//					component.modelo =  getValueOfCell(cell);
+//					break;
+//				case 6:
+//					component.submodelo =  getValueOfCell(cell);
+//					break;
+//				case 7:
+//					component.tipo =  getValueOfCell(cell);
+//				default:
+//					break;
+//				}
+//			}
+//			MorphiaQuery q = Component.createQuery();
+//			
+//			String marca = component.marca != null ? component.marca :StringUtils.EMPTY;
+//			String modelo = component.modelo != null ? component.modelo :StringUtils.EMPTY;
+//			String submodelo = component.submodelo != null ? component.submodelo :StringUtils.EMPTY;
+//			String tipo = component.tipo != null ? component.tipo :StringUtils.EMPTY;
+//			String nroDeParte = component.nroDeParte != null ? component.nroDeParte :StringUtils.EMPTY;
+//			
+//			q.and(q.criteria("marca").contains(marca), q.criteria("modelo").contains(modelo),
+//					q.criteria("submodelo").contains(submodelo ), q.criteria("tipo").contains(tipo),
+//					q.criteria("nroDeParte").contains(nroDeParte));
+//			List<Model> components = q.asList();
+//			if (components == null || components.isEmpty()) {
+//				component.save();
+//			}
+//		}
 		
 	}
 

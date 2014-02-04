@@ -1,33 +1,20 @@
 package models;
 
-import java.io.File;
-import java.util.List;
-import java.util.Map;
+import javax.persistence.Entity;
 
-import org.apache.commons.io.FilenameUtils;
+import play.db.jpa.Blob;
+import play.db.jpa.Model;
 
 
-import play.modules.morphia.Blob;
-import play.modules.morphia.Model;
-
-import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Index;
-
-@Entity("components")
+@Entity
 public class Component extends Model {
 
-
-	public String modelo;
-	public String submodelo;
-	public String marca;
-	public String tipo;
-	public String nroDeParte;
+	public ComponentModel model;
+	public ComponentTrademark tradeMark;
+	public ComponentType type;
+	public String partNumber;
 	public Blob image;
-	public Map<String, String> metadata;
-	public List<String> deviceCompatibility;
+//	public Map<String, String> metadata;
+//	public List<String> deviceCompatibility;
 
-	public void setImage(File file) {
-		String type = "image/" + FilenameUtils.getExtension(file.getName());
-		image = new Blob(file, type);
-	}
 }

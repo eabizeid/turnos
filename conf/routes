@@ -3,7 +3,8 @@
 # ~~~~
 
 # Import Secure routes
-*       /                                       module:secure
+#       /                                       module:secure
+*       /admin         							module:crud
 # Home page
 GET     /                                       Application.index
 

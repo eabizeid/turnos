@@ -9,6 +9,9 @@
 $(document).ready(function() {
 	
 	$('#marcaStep').hide();
+	$("#tipoStep").hide();
+	$("#moreDataButtonType").hide();
+	$("#searchButton").hide()
 	
 } );
 
@@ -48,25 +51,32 @@ openDetail = function(componentId) {
 				<div class="form-group" id="modeloStep">
     				<label for="modelo">Conocés el modelo?
     				</label>
-    				<input type="text" class="form-control" id="modelo" name="modelo" >
+    				<input type="text" class="form-control" id="modelo" name="model" >
 				</div>
     			<div class="btn-group" data-toggle="buttons" id="marcaStep">
 	    			<div><label>Conocés la marca?</label></div>
+	    			#{list items:trademarks, as:'t'}
 					  <label class="btn btn-primary trademark">
-					    <input type="radio" name="marca" id="option1" value="BANGHO"> BANGHO
+					    <input type="radio" name="trademark" id="option" value="${t.description}">${t.description}
 					  </label>
+					#{/list}  
+				</div>
+				<div class="btn-group" data-toggle="buttons" id="tipoStep">
+	    			<div><label>Tipo de componente</label></div>
+	    			#{list items:types, as:'type'}
 					  <label class="btn btn-primary trademark">
-					    <input type="radio" name="marca" id="option2" value="ASUS"> ASUS
+					    <input type="radio" name="tipo" id="option1" value="${type.description}"> ${type.description}
 					  </label>
-					  <label class="btn btn-primary trademark">
-					    <input type="radio" name="marca" id="option3" value="HP"> HP
-					  </label>
+					#{/list}  
 				</div>
 				<br /> <br />
 				<br />
 				<div class="btn-group">
-					<button id="moreDataButton" type="button" onclick="javascript:showNextStep('marca')" class="btn btn-large btn-primary">Tengo mas datos</button>
-				    <button type="submit" class="btn btn-large btn-primary">Es suficiente!</button>
+					<button id="moreDataButton" type="button" onclick="javascript:showNextStep('marca')" 
+					class="btn btn-large btn-primary">Siguiente</button>
+					<button id="moreDataButtonType" type="button" onclick="javascript:showNextStep('tipo')" 
+					class="btn btn-large btn-primary">Siguiente</button>
+				    <button id="searchButton" type="submit" class="btn btn-large btn-primary">Buscar</button>
 				</div>
 			#{/form}
   </div>
@@ -148,9 +158,19 @@ openDetail = function(componentId) {
 	 		else {
 	 			$("#modeloStep").hide();
 	 			$("#moreDataButton").hide();
+	 			$("#tipoStep").hide();
 	 			$("#marcaStep").show();
+	 			$("#moreDataButtonType").show();
 	 			$('.trademark').button();	
 	 		}
+	 	} else if (step == 'tipo') {
+	 		$("#modeloStep").hide();
+	 		$("#marcaStep").hide();
+ 			$("#moreDataButton").hide();
+ 			$("#moreDataButtonType").hide();
+ 			$("#tipoStep").show();
+ 			$("#searchButton").show();
+ 			$('.trademark').button();	
 	 	}
 	
 	}
