@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.List;
 
 import models.Component;
-import models.ComponentModel;
 import models.ComponentTrademark;
 import models.ComponentType;
 import models.Mail;
@@ -24,7 +23,7 @@ public class Titus extends Controller {
 	public static void search() {
 		renderArgs.put("trademarks", ComponentTrademark.findAll());
 		renderArgs.put("types", ComponentType.findAll());
-		renderArgs.put("allModels", ComponentModel.findAll());
+		renderArgs.put("allModels", Component.findAll());
 		renderArgs.put("step", 1);
         render();
     }
@@ -34,24 +33,31 @@ public class Titus extends Controller {
 		List<Component> components = Lists.newArrayList();
 		try {
 			
-			components = Component.find("select c from Component c, " +
-					"ComponentModel m, ComponentSubmodel s, ComponentType t " +
-					"where m.description = ? and s.description = ? and t.description = ? ", trademark, model, type).fetch();
+			components = Component.find("select c from Component c," +
+					"								   ComponentTrademark tr " +
+					"						where c.trademark = tr and tr.description = ? and" +
+					" 							  c.model = ?", trademark, model).fetch();
+			
+
 		} catch( Exception e) {
 			e.printStackTrace();
 		}
 		String query = StringUtils.EMPTY;
 		if (components.isEmpty()) {
 			if (model != null && !model.isEmpty()) {
-				query = "modelo = ".concat(model);
+				query = "modelo: ".concat(model);
 			}
 			if (trademark != null && !trademark.isEmpty()) {
-				query.concat("marca = ").concat(trademark);
+				query =query.concat(" marca:").concat(trademark);
+			}
+			if (type != null && !type.isEmpty()) {
+				query = query.concat(" tipo: ").concat(type);
 			}
 		}
 		renderArgs.put("query", query);
 		renderArgs.put("step", 2);
-		render("Titus/search.html", components);
+		
+		render(components);
     }
 	
 	public static void noResults(String mail, String query) {

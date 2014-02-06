@@ -1,3 +1,10 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
+trademark=Marca
+type=Tipo
+component=Componente
+model=Modelo
+partNumber=Nro de parte
+image=Imágen
+description=Descripción

@@ -76,70 +76,27 @@ openDetail = function(componentId) {
 					class="btn btn-large btn-primary">Siguiente</button>
 					<button id="moreDataButtonType" type="button" onclick="javascript:showNextStep('tipo')" 
 					class="btn btn-large btn-primary">Siguiente</button>
-				    <button id="searchButton" type="submit" class="btn btn-large btn-primary">Buscar</button>
+				    <button id="searchButton" type="button" class="btn btn-large btn-primary"
+				    	data-toggle="modal" data-target="#results" onclick="javascript:showNextStep('resultados')">Buscar</button>
 				</div>
 			#{/form}
   </div>
 </div>
-  #{if components != null && components.size()>0}
-  <div class="wrap container">
-  <h3></h3>
-  <h3>Resul<span class="red">tados</span></h3>
-  	<table id="results" class="table table-striped">
-  		<thead>
-  			<tr>
-  				<th>Marca</th>
-  				<th>Tipo</h>
-  				<th>Modelo</th>
-  				<th>Submodelo</th>
-  				<th>Nro de parte</th>
-  				<th></th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  			#{list items:components, as:'component'}
-  				<tr>
-  					<td>${component.marca}</td>
-  					<td>${component.tipo}</td>
-  					<td>${component.modelo}</td>
-  					<td>${component.submodelo}</td>
-  					<td>${component.nroDeParte}</td>
-  					<td><button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" onclick="javascript: openDetail(${component.id});">Ver</button></td>
-  				</tr>
-  			#{/list}
-  		</tbody>
-	</table>
-  </div>
-  
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+ <div class="modal fade" id="results" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        <h4 class="modal-title" id="myModalLabel">Detalle de producto</h4>
+	        <h4 class="modal-title" id="myModalLabel">Resutado</h4>
 	      </div>
 	      <div class="modal-body">
-  			<div id="componentDetail"></div>
+  			<div id="resultList"></div>
   		  </div>
   		</div>
   	</div>
   </div>
-  #{/if}
-  #{else}
-  	#{if step == 2}
-	  #{form @Titus.noResults() }
-	  		<div class="wrap">
-					<div class="form-group" id="modeloStep">
-	    				<label for="mail">No encontramos resultados, pero dejanos tu mail que en 15 minutos te enviamos una respuesta satisfactoria
-	    				</label>
-	    				<input type="text" class="form-control" id="mail" name="mail" >
-	    				<input type="hidden" id="query" name="query" value="${query}"/>
-	    				<button type="submit" class="btn btn-large btn-primary">Quiero!</button>
-					</div>
-			</div>
-		#{/form}
-	#{/if}
-  #{/else}
+
  
 <div id="footer">
   <p class="right">Design: <a href="#">EAZ</a></p>
@@ -171,6 +128,23 @@ openDetail = function(componentId) {
  			$("#tipoStep").show();
  			$("#searchButton").show();
  			$('.trademark').button();	
+ 			
+	 	} else if (step ="resultados") {
+	 		$("#resultList").html("");
+	 		$("#modeloStep").show();
+	 		$("#marcaStep").hide();
+ 			$("#moreDataButton").show();
+ 			$("#moreDataButtonType").hide();
+ 			$("#tipoStep").hide();
+ 			$("#searchButton").hide();
+ 			$('.trademark').button();
+		    var action = #{jsAction @makeASearch(':trademark', ':model', ':type') /}
+			trademark = $('input[name=trademark]:checked').val();
+			type = $('input[name=tipo]:checked').val();
+			model = $('#modelo').val();
+		   $.post(action({trademark: trademark, model: model, type: type}), function(data) {
+	          $("#resultList").append(data);
+		   });
 	 	}
 	
 	}
