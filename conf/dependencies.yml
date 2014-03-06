@@ -4,4 +4,12 @@ require:
     - play
     - com.google.guava -> guava 15.0
     - org.apache.poi -> poi [3.8,)
+    - com.mercadopago -> sdk [0.0.1,)
     - play -> crud
+    
+repositories:
+    - mercadopago:
+        type: iBiblio
+        root: "https://github.com/mercadopago/sdk-java/raw/master/snapshots/"
+        contains:
+           - com.mercadopago -> *

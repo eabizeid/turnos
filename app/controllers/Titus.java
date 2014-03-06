@@ -3,6 +3,7 @@ package controllers;
 import java.io.File;
 import java.util.List;
 
+import mercadopago.MP;
 import models.Component;
 import models.ComponentTrademark;
 import models.ComponentType;
@@ -12,9 +13,12 @@ import models.Pending;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import play.mvc.Controller;
 import service.feeder.FileFeeder;
+import service.mailer.MailSender;
 
 import com.google.common.collect.Lists;
 
@@ -34,9 +38,9 @@ public class Titus extends Controller {
 		try {
 			
 			components = Component.find("select c from Component c," +
-					"								   ComponentTrademark tr " +
-					"						where c.trademark = tr and tr.description = ? and" +
-					" 							  c.model = ?", trademark, model).fetch();
+					"								   ComponentTrademark tr, ComponentType ty " +
+					"						where c.trademark = tr and c.type = ty and tr.description = ? and" +
+					" 							  c.model = ? and ty.description = ?", trademark, model, type).fetch();
 			
 
 		} catch( Exception e) {
@@ -103,26 +107,21 @@ public class Titus extends Controller {
 	
 	public static void pendings() {
 		List<Pending> pendings = Pending.findAll();
+		renderArgs.put("trademarks", ComponentTrademark.findAll());
+		renderArgs.put("types", ComponentType.findAll());
 		render(pendings);
 	}
 	
-	public static void resolvePending(Component component, String pendingToResolve) {
+	public static void resolvePending(Component component, Long idType, Long idTrademark, String pendingToResolve) {
 		try { 
+			component.trademark = ComponentTrademark.findById(idTrademark);
+			component.type = ComponentType.findById(idType);
 			component.save();
 			Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
 			for (Mail mail : pending.mails) {
 				
-				SimpleEmail email = new SimpleEmail();
-				try {
-					email.setFrom("titus@titus.com.ar");
-					email.addTo(mail.mail);
-					email.setSubject("We have a result for you");
-					email.setMsg("Resuelto");
-				} catch (EmailException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				play.libs.Mail.send(email);
+				MailSender sender = new MailSender();
+				sender.sendEmail(mail);
 				
 			}
 			((Pending)Pending.findById(Long.valueOf(pendingToResolve))).delete();
@@ -136,6 +135,24 @@ public class Titus extends Controller {
 	
 	public static void viewDetail(String componentId) {
 		Component component = Component.findById(Long.valueOf(componentId));
+		String clientId = "8077350156322774";
+		String clientSecret = "8Hl48rbM9UWPjQW3ug0xjCaujPQ5bcpk";
+
+		MP mp = new MP(clientId, clientSecret);
+
+		JSONObject preference;
+		try {
+			preference = mp.createPreference("{'items':[{'title':'sdk-java','quantity':1,'currency_id':'ARS','unit_price':10.5}]}");
+			String checkoutURL = preference.getJSONObject("response").getString("sandbox_init_point");
+			renderArgs.put("checkoutURL", checkoutURL); 
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		render(component);
 	}
 

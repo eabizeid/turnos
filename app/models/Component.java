@@ -1,5 +1,7 @@
 package models;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -18,6 +20,7 @@ public class Component extends Model {
 	public ComponentType type;
 	public String partNumber;
 	public Blob image;
+	public BigDecimal price;
 //	public Map<String, String> metadata;
 //	public List<String> deviceCompatibility;
 

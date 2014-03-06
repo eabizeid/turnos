@@ -175,17 +175,27 @@ setPendingToResolve = function (toResolve) {
 	      </div>
 	      <div class="modal-body">
 				<div class="form-group">
-    				<p><label class="sr-only" for="component.marca">Trademark: </label>
-    				<input type="text" class="form-control" id="component.marca" placeholder="type a trademark" name="component.marca" >
-				    <label class="sr-only" for="component.modelo">Model: </label>
-    				<input type="text" class="form-control" id="component.modelo" placeholder="type a model" name="component.modelo" >
-				    <label class="sr-only" for="component.submodelo">Submodel: </label>
-    				<input type="text" class="form-control" id="component.submodelo" placeholder="type a submodel" name="component.submodelo" >
+				    <p><label for="component.modelo">Modelo: </label>
+    				<input type="text" class="form-control" id="component.model" name="component.model" />
+    				</p>
+    				<p>
+    				<label for="component.trademark">Marca: </label>
+    				<select class="form-control" id="component.trademark"  name="idTrademark" >
+    					#{list items:trademarks, as:'mark'}
+    					<option value="${mark.id}">${mark.description}</option>
+    					#{/list}
+    				</select>
+				    <label for="component.type.description"> Tipo: </label>
+    				<select class="form-control" id="component.trademark"  name="idType" >
+    					#{list items:types, as:'type'}
+    					<option value="${type.id}">${type.description}</option>
+    					#{/list}
+    				</select>
+    				</p>
+				    <p><label for="component.partNumber">Número de parte: </label>
+    				<input type="text" class="form-control" id="component.partNumber" name="component.partNumber" >
 				    </p>
-				    <p><label class="sr-only" for="component.nroDeParte">Part number: </label>
-    				<input type="text" class="form-control" id="component.nroDeParte" placeholder="type a part number " name="component.nroDeParte." >
-				    </p>
-				    <p><label class="sr-only" for="componentImage">Component image: </label>
+				    <p><label  for="componentImage">Imágen del componente: </label>
 						<input class="componentImage" id="componentImage" type='file' name="component.image" />
 					</p>
 	    			<div id="prev_componentImage" ></div>
