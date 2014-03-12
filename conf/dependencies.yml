@@ -4,6 +4,7 @@ require:
     - play
     - com.google.guava -> guava 15.0
     - org.apache.poi -> poi [3.8,)
+    - org.antlr -> stringtemplate 4.0.2
     - com.mercadopago -> sdk [0.0.1,)
     - play -> crud
     

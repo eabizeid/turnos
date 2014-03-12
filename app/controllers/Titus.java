@@ -114,6 +114,7 @@ public class Titus extends Controller {
 	
 	public static void resolvePending(Component component, Long idType, Long idTrademark, String pendingToResolve) {
 		try { 
+			
 			component.trademark = ComponentTrademark.findById(idTrademark);
 			component.type = ComponentType.findById(idType);
 			component.save();
@@ -121,7 +122,7 @@ public class Titus extends Controller {
 			for (Mail mail : pending.mails) {
 				
 				MailSender sender = new MailSender();
-				sender.sendEmail(mail);
+				sender.sendEmail(mail, component);
 				
 			}
 			((Pending)Pending.findById(Long.valueOf(pendingToResolve))).delete();
