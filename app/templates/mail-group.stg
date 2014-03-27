@@ -1,0 +1,30 @@
+group mail;
+
+pendingResolved(time, price, checkoutURL, component) ::= << 
+
+<html>
+	<body>
+		<h3>TIEMPO DE RESPUESTA: $time$ minutos</h3>
+		
+		<h3>REPUESTO CONSULTADO:</h3>
+		<p>
+			$component.type.description$ <br />
+			$component.trademark$
+		</p>
+		<p>
+		<strong>$component.price$ PESOS + IVA</strong>
+		</p>
+		<p>
+		STOCK DISPONIBLE EN ARGENTINA. <br />
+		TIEMPO DE ARRIBO A SU UBICACION. 4 A 7 DIAS HABILES.
+		</p>	
+		<p>
+		<a href="$checkoutURL$" name="MP-Checkout" class="blue-l-arall-rn">Pagar</a>
+		<script type="text/javascript" src="http://mp-tools.mlstatic.com/buttons/render.js"></script>
+		</p>
+		<p>
+		COTICE CON SEGURIDAD. USE TITUS!
+		</p>
+	</body>
+</html>
+>>

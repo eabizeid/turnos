@@ -16,9 +16,8 @@ $(document).ready(function() {
 } );
 
 openDetail = function(componentId) {
-	
 	  var action = #{jsAction @viewDetail(':componentId') /}
-
+	  $("#componentDetail").html("");
 	   $.post(action({componentId: componentId}), function(data) {
           $("#componentDetail").append(data);
 	   });
@@ -42,7 +41,7 @@ openDetail = function(componentId) {
    #{if flash.success}
   	 <div class="alert alert-warning fade in">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <strong>${flash.success}</strong> You'll have an answer in 15 minutes.
+        <strong>${flash.success}</strong> Tendrás una respuesta en menos de 15 minutos.
       </div>
 	#{/if}
     <h3>Make a <span class="red">Search </span></h3>
@@ -83,12 +82,11 @@ openDetail = function(componentId) {
   </div>
 </div>
 
- <div class="modal fade" id="results" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal fade" id="results" tabindex="-3" role="dialog" aria-labelledby="results" aria-hidden="true">
     <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        <h4 class="modal-title" id="myModalLabel">Resutado</h4>
 	      </div>
 	      <div class="modal-body">
   			<div id="resultList"></div>
@@ -97,7 +95,19 @@ openDetail = function(componentId) {
   	</div>
   </div>
 
- 
+ <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Detalle de producto</h4>
+	      </div>
+	      <div class="modal-body">
+  			<div id="componentDetail"></div>
+  		  </div>
+  		</div>
+  	</div>
+  </div>
 <div id="footer">
   <p class="right">Design: <a href="#">EAZ</a></p>
   <p>&copy; Copyright 2013 <a href="#">Titus Intelligence</a> &middot; All Rights Reserved</p>

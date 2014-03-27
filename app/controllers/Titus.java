@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import mercadopago.MP;
@@ -75,6 +76,7 @@ public class Titus extends Controller {
 		m.mail = mail;
 		pending.mails.add(m);
 		pending.question = query;
+		pending.timeInMs = (new Date()).getTime();
 		pending.save();
 		SimpleEmail email = new SimpleEmail();
 		try {
@@ -89,7 +91,7 @@ public class Titus extends Controller {
 		play.libs.Mail.send(email);
 		
 		flash.success("Muchas Gracias!");
-		render("Titus/search.html");
+		search();
 		
 	}
 	
@@ -119,10 +121,11 @@ public class Titus extends Controller {
 			component.type = ComponentType.findById(idType);
 			component.save();
 			Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
+			long responseTime = (new Date()).getTime() - pending.timeInMs;
 			for (Mail mail : pending.mails) {
 				
 				MailSender sender = new MailSender();
-				sender.sendEmail(mail, component);
+				sender.sendEmail(mail, component, responseTime);
 				
 			}
 			((Pending)Pending.findById(Long.valueOf(pendingToResolve))).delete();
@@ -143,7 +146,7 @@ public class Titus extends Controller {
 
 		JSONObject preference;
 		try {
-			preference = mp.createPreference("{'items':[{'title':'sdk-java','quantity':1,'currency_id':'ARS','unit_price':10.5}]}");
+			preference = mp.createPreference("{'items':[{'title':'sdk-java','quantity':1,'currency_id':'ARS','unit_price':" + component.price + "}]}");
 			String checkoutURL = preference.getJSONObject("response").getString("sandbox_init_point");
 			renderArgs.put("checkoutURL", checkoutURL); 
 		} catch (JSONException e) {

@@ -25,4 +25,5 @@ public class Pending extends Model {
     @JoinColumn(name="description")
     @Where(clause="1=1")
 	public List<Mail> mails = Lists.newArrayList();
+	public long timeInMs;
 }
