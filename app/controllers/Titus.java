@@ -125,7 +125,7 @@ public class Titus extends Controller {
 			for (Mail mail : pending.mails) {
 				
 				MailSender sender = new MailSender();
-				sender.sendEmail(mail, component, responseTime);
+				sender.sendEmail(mail, component, responseTime, generateCheckoutURL(component));
 				
 			}
 			((Pending)Pending.findById(Long.valueOf(pendingToResolve))).delete();
@@ -139,16 +139,22 @@ public class Titus extends Controller {
 	
 	public static void viewDetail(String componentId) {
 		Component component = Component.findById(Long.valueOf(componentId));
+		renderArgs.put("checkoutURL", generateCheckoutURL(component)); 
+
+		render(component);
+	}
+	
+	private static String generateCheckoutURL(Component component) {
+		
 		String clientId = "8077350156322774";
 		String clientSecret = "8Hl48rbM9UWPjQW3ug0xjCaujPQ5bcpk";
 
 		MP mp = new MP(clientId, clientSecret);
 
-		JSONObject preference;
+		String checkoutURL = StringUtils.EMPTY;
 		try {
-			preference = mp.createPreference("{'items':[{'title':'sdk-java','quantity':1,'currency_id':'ARS','unit_price':" + component.price + "}]}");
-			String checkoutURL = preference.getJSONObject("response").getString("sandbox_init_point");
-			renderArgs.put("checkoutURL", checkoutURL); 
+			JSONObject preference = mp.createPreference("{'items':[{'title':'"+component.toString()+"','quantity':1,'currency_id':'ARS','unit_price':" + component.price + "}]}");
+			checkoutURL = preference.getJSONObject("response").getString("sandbox_init_point");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,8 +162,7 @@ public class Titus extends Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		render(component);
+		return checkoutURL;
 	}
 
 }

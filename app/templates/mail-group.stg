@@ -3,6 +3,9 @@ group mail;
 pendingResolved(time, price, checkoutURL, component) ::= << 
 
 <html>
+	<head>
+		<script type="text/javascript" src="http://mp-tools.mlstatic.com/buttons/render.js"></script>
+	</head>
 	<body>
 		<h3>TIEMPO DE RESPUESTA: $time$ minutos</h3>
 		
@@ -20,7 +23,7 @@ pendingResolved(time, price, checkoutURL, component) ::= <<
 		</p>	
 		<p>
 		<a href="$checkoutURL$" name="MP-Checkout" class="blue-l-arall-rn">Pagar</a>
-		<script type="text/javascript" src="http://mp-tools.mlstatic.com/buttons/render.js"></script>
+		
 		</p>
 		<p>
 		COTICE CON SEGURIDAD. USE TITUS!
