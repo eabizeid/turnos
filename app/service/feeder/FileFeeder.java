@@ -51,12 +51,21 @@ public class FileFeeder {
 					break;
 				case 4:
 					trademark = getValueOfCell(cell).trim();
+					if (trademark.isEmpty()) {
+						return;
+					}
 					break;
 				case 5:
 					model =  StringUtils.upperCase(getValueOfCell(cell)).trim();
+					if (model.isEmpty()) {
+						return;
+					}
 					break;
 				case 7:
 					type =  getValueOfCell(cell).trim();
+					if (type.isEmpty()) {
+						return;
+					}
 				default:
 					break;
 				}

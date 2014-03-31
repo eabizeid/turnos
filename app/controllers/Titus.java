@@ -41,7 +41,7 @@ public class Titus extends Controller {
 			components = Component.find("select c from Component c," +
 					"								   ComponentTrademark tr, ComponentType ty " +
 					"						where c.trademark = tr and c.type = ty and tr.description = ? and" +
-					" 							  c.model = ? and ty.description = ?", trademark, model, type).fetch();
+					" 							  UPPER(c.model) = ? and ty.description = ?", trademark, StringUtils.upperCase(model), type).fetch();
 			
 
 		} catch( Exception e) {
@@ -80,9 +80,9 @@ public class Titus extends Controller {
 		pending.save();
 		SimpleEmail email = new SimpleEmail();
 		try {
-			email.setFrom("titus@titus.com.ar");
-			email.addTo("eduardo.abizeid@gmail.com");
-			email.setSubject("You have a new pending");
+			email.setFrom("pruebas@pop-tech.com.ar");
+			email.addTo("pruebas@pop-tech.com.ar");
+			email.setSubject("Se generó un nuevo pendiente");
 			email.setMsg(query.concat("\n").concat("Cliente: ".concat(mail)));
 		} catch (EmailException e) {
 			// TODO Auto-generated catch block
