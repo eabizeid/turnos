@@ -1,8 +1,13 @@
+<link rel="stylesheet" media="screen" href="@{'/public/stylesheets/jquery.fancybox.css'}">
 <div>
   <div>
     Marca: ${component.trademark.description} Modelo: ${component.model} Tipo: ${component.type.description}
     <div >
-      <div>Foto: <img src="@{ShowImage.render(component.id)}" height="20%" width="30%" /></div>
+      <div>Foto: 
+	      <a  href="@{ShowImage.render(component.id)}" class="fancybox">
+	      	<img src="@{ShowImage.render(component.id)}" />
+	      </a>
+      </div>
       <div>Nro de parte: ${component.partNumber}</div>
       <div>Precio: ${component.price}</div>
     </div>
