@@ -53,10 +53,10 @@ public class Titus extends Controller {
 				query = "modelo: ".concat(model);
 			}
 			if (trademark != null && !trademark.isEmpty()) {
-				query =query.concat(" marca:").concat(trademark);
+				query =query.concat("; marca: ").concat(trademark);
 			}
 			if (type != null && !type.isEmpty()) {
-				query = query.concat(" tipo: ").concat(type);
+				query = query.concat("; tipo: ").concat(type);
 			}
 		}
 		renderArgs.put("query", query);

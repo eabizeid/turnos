@@ -17,9 +17,9 @@ import play.db.jpa.Model;
 public class Component extends Model {
 
 	public String model;
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.PERSIST)
 	public ComponentTrademark trademark;
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.PERSIST)
 	public ComponentType type;
 	public String partNumber;
 	public Blob image;

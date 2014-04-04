@@ -6,7 +6,7 @@
 #       /                                       module:secure
 *       /admin         							module:crud
 # Home page
-GET     /                                       Application.index
+GET     /                                       Titus.search
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
