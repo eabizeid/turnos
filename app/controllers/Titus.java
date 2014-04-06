@@ -72,8 +72,14 @@ public class Titus extends Controller {
 			pending = pendings.get(0);
 			pending.quantity++;
 		}
-		Mail m = new models.Mail();
-		m.mail = mail;
+		List<Mail> mails = Mail.find("byMail", mail).fetch();
+		Mail m;
+		if (mails == null || mails.isEmpty()) {
+			m = new models.Mail();
+			m.mail = mail;
+		} else {
+			m = mails.get(0);
+		}
 		pending.mails.add(m);
 		pending.question = query;
 		pending.timeInMs = (new Date()).getTime();
