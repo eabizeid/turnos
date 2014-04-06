@@ -1,0 +1,47 @@
+#{extends 'main.html' /}
+#{set title:'Titus' /}
+     
+
+#{form @Titus.resolvePending(), enctype:'multipart/form-data', class:"form-horizontal"}
+<div id="teaser">
+  <div class="wrap">
+    <div id="image"></div>
+    <div class="box">
+      <h2><em title="Sharing and breakdowning devices">Clientes</em></h2>
+      <p>The Pendings are the search results that could not resolve Titus.</p>
+    </div>
+  </div>
+</div>
+
+  #{if clients != null && clients.size()>0}
+  <div class="wrap container">
+  <h3>Clie<span class="red">ntes</span></h3>
+  	<table id="results" class="table table-striped">
+  		<thead>
+  			<tr>
+  				<th>E-mail</th>
+  				<th></th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			#{list items:clients, as:'client'}
+  				<tr>
+  					<td>${client.mail}</td>
+  					<td><</td>
+					
+  				</tr>
+  			#{/list}
+  		</tbody>
+	</table>
+  </div>
+  #{/if}
+  #{else}
+  <div class="wrap container">
+  	<p>No hay clientes cargados</p>
+  </div>
+  #{/else}
+#{/form}
+<div id="footer">
+  <p class="right">Design: <a href="#">EAZ</a></p>
+  <p>&copy; Copyright 2013 <a href="#">Titus Intelligence</a> &middot; All Rights Reserved</p>
+</div>

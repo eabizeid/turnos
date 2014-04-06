@@ -164,5 +164,10 @@ public class Titus extends Controller {
 		}
 		return checkoutURL;
 	}
+	
+	public static void clients() {
+		List<Mail> clients = Mail.findAll(); 
+		render(clients);
+	}
 
 }

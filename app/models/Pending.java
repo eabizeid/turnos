@@ -21,7 +21,7 @@ public class Pending extends Model {
 
 	public String question;
 	public int quantity = 1;
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.PERSIST, fetch=FetchType.EAGER)
     @JoinColumn(name="description")
     @Where(clause="1=1")
 	public List<Mail> mails = Lists.newArrayList();
