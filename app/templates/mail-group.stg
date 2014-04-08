@@ -1,6 +1,6 @@
 group mail;
 
-pendingResolved(time, price, checkoutURL, component) ::= << 
+pendingResolved(time, price, checkoutURL, component, cid) ::= << 
 
 <html>
 	<head>
@@ -11,8 +11,7 @@ pendingResolved(time, price, checkoutURL, component) ::= <<
 		
 		<h3>REPUESTO CONSULTADO:</h3>
 		<p>
-			$component.type.description$ <br />
-			$component.trademark$
+			<strong>$component.type.description$  $component.trademark$	  $component.model$  </strong>
 		</p>
 		<p>
 		<strong>$component.price$ PESOS + IVA</strong>
@@ -22,12 +21,13 @@ pendingResolved(time, price, checkoutURL, component) ::= <<
 		TIEMPO DE ARRIBO A SU UBICACION. 4 A 7 DIAS HABILES.
 		</p>	
 		<p>
-		<a href="$checkoutURL$" name="MP-Checkout" class="blue-l-arall-rn">Pagar</a>
-		
+		<a href="$checkoutURL$" name="MP-Checkout" class="blue-l-arall-rn">Pagar</a> <br />
 		</p>
 		<p>
 		COTICE CON SEGURIDAD. USE TITUS!
 		</p>
+		Le enviaremos este repuesto:<br />
+		<img id="imagen" src="cid:$cid$" width="50%" heigth="50%"/>
 	</body>
 </html>
 >>
