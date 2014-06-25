@@ -1,0 +1,120 @@
+#{extends 'main.html' /}
+#{set title:'Titus' /}
+     
+
+#{form @Administration.savePart(), encpart:'multipart/form-data', class:"form-horizontal"}
+<div id="teaser">
+  <div class="wrap">
+    <div id="image"></div>
+    <div class="box">
+      <h2><em title="Sharing and breakdowning devices">&{'parts'}</em></h2>
+      <p>&{'parts.page.description'}</p>
+    </div>
+  </div>
+</div>
+
+  #{if parts != null && parts.size()>0}
+  <div class="wrap container">
+  	<table id="results" class="table table-striped">
+  		<thead>
+  			<tr>
+                <th></th>
+                <th>&{'description'}</th>
+                <th>&{'type'}</th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			#{list items:parts, as:'part'}
+  				<tr>
+                    <td><input type="checkbox" name="selectedParts" value="${part.id}"> </td>
+                    <td>${part.description}</td>
+                    <td>${part.type.description}</td>
+
+  				</tr>
+  			#{/list}
+  		</tbody>
+	</table>
+  </div>
+  #{/if}
+  #{else}
+  <div class="wrap container">
+  	<p>&{'parts.no.results'}</p>
+  </div>
+  #{/else}
+    <div class="wrap container">
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'new'}</button>
+            #{if parts != null && parts.size()>0}
+            <input type="submit" class="btn btn-primary" formaction="/Administration/removeParts" value="&{'remove'}"/>
+            <button part="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'edit'}</button>
+            #{/if}
+            <button type="button" class="btn btn-primary">&{'cancel'}</button>
+        </div>
+    </div>
+<!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">&{'parts.add'}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="description">&{'description'}: </label>
+                        <div class="col-sm-10">
+                            <input part="text" class="form-control" id="description" name="description" />
+                        </div>
+                        <label class="col-sm-2 control-label" >&{'select'}: </label>
+                        <div class="col-sm-8">
+                            #{list items:types, as:'type'}
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" value="${type.id}" name="selectedType" onclick="showFeatures(${type.id})">${type.description}
+                                </label>
+                            </div>
+                            <div id="feature${type.id}">
+                                %{
+                                    for(feature in type.features) {
+                                %}
+                                <div class="form-group">
+                                    <label for="${feature.description}${type.id}">${feature.description}</label>
+                                    <input type="text" id="${feature.description}${type.id}" class="form-control" name="partFeatures">
+                                </div>
+                                %{
+                                    }
+                                }%
+                            </div>
+                            #{/list}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">&{'close'}</button>
+                    <button type="submit" class="btn btn-primary">&{'save'}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+#{/form}
+<div id="footer">
+  <p class="right">Design: <a href="#">EAZ</a></p>
+  <p>&copy; Copyright 2013 <a href="#">Titus Intelligence</a> &middot; All Rights Reserved</p>
+</div>
+<script type="text/javascript">
+        <!--
+            $(document).ready(function(){
+                hideAllFeaturesDivs()
+
+            })
+            var showFeatures = function(id) {
+                hideAllFeaturesDivs()
+                divToShow = 'feature' + id;
+                $("#"+divToShow).show()
+            }
+
+            var hideAllFeaturesDivs = function() {
+                $("div[id^='feature']").hide()
+            }
+        -->
+</script>

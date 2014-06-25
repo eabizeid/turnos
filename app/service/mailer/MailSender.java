@@ -34,10 +34,10 @@ public class MailSender {
 		email.setSubject(HEMOS_RESUELTO_TU_CONSULTA_MAS_RAPIDO_TITUS);
 		// embed the image and get the content id
 		// set the html message
-		byte[] image = IOUtils.toByteArray(component.image.get());
-		DataSource ds = new ByteArrayDataSource(image, "image/jpeg");
-		String cid = email.embed(ds, "componente");
-		template.add("cid", cid);
+	//	byte[] image = IOUtils.toByteArray(component.image.get());
+		//DataSource ds = new ByteArrayDataSource(image, "image/jpeg");
+		//String cid = email.embed(ds, "componente");
+		//template.add("cid", cid);
 		email.setHtmlMsg(template.render());
 		// set the alternative message
 		email.setTextMsg("Your email client does not support HTML, too bad :(");

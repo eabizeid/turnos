@@ -41,7 +41,7 @@ button {
  
 #teaser { clear: both; height: 259px; background: #fff  }
 	.box { float: left; padding: 66px 0 0; width: 480px; color: #5C5C5C; }
-	#image { float: right; width: 388px; position: relative; top: 16px; background: url(/public/images/titus.gif) no-repeat top right; height: 258px; }
+	#image { float: right; width: 388px; position: relative; top: 16px; background: url(/public/images/titus.gif) no-repeat top right; height: 240px; }
 	
 #bar { height: 40px; margin: 0 0 30px; padding: 8px 0 0 0; }
 	.step { cursor: pointer; color: #FFB114; padding: 4px 0 0 11px; margin: 0 35px 0 0; font-size: 1.4em; float: left; text-align: center; background: url(../images/step.gif) no-repeat; height: 30px; }

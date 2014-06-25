@@ -1,6 +1,15 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
+#General
+description=Descripción
+new=Nuevo
+remove=Borrar
+edit=Editar
+save=Guardar
+cancel=Cancelar
+close=Cerrar
+
 trademark=Marca
 type=Tipo
 component=Componente
@@ -8,3 +17,34 @@ model=Modelo
 partNumber=Nro de parte
 image=Imágen
 description=Descripción
+select=Seleccionar
+#Features
+feature=Característica
+features=Características
+features.no.results=No se han encontrado características
+features.page.description=Las características son las que nos permiten identificar de forma unívoca un componente o parte.
+feature.add=Agregar característica
+
+#Component types
+
+type=Tipo de componente
+types=Tipo de componentes
+types.no.results=No se han encontrado tipos de componentes
+types.page.description=Los tipos de componentes constituyen la base para un componente
+types.add=Agregar Tipo de componente
+
+#Component trademark
+
+mark=Marca
+marks=Marcas
+marks.no.results=No se han encontrado marcas
+marks.page.description=Las marca representa al fabricante del componente
+marks.add=Agregar Marca
+
+Part
+
+part=Parte
+parts=Partes
+parts.no.results=No se han encontrado partes
+parts.page.description=Una parte es el producto vendible asociado a un componente.
+parts.add=Agregar parte

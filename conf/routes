@@ -8,6 +8,8 @@
 # Home page
 GET     /                                       Titus.search
 
+GET     /about									Titus.about		
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

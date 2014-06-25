@@ -1,0 +1,89 @@
+#{extends 'main.html' /}
+#{set title:'Titus' /}
+     
+
+#{form @Administration.saveType(), enctype:'multipart/form-data', class:"form-horizontal"}
+<div id="teaser">
+  <div class="wrap">
+    <div id="image"></div>
+    <div class="box">
+      <h2><em title="Sharing and breakdowning devices">&{'types'}</em></h2>
+      <p>&{'types.page.description'}</p>
+    </div>
+  </div>
+</div>
+
+  #{if componentTypes != null && componentTypes.size()>0}
+  <div class="wrap container">
+  	<table id="results" class="table table-striped">
+  		<thead>
+  			<tr>
+                <th></th>
+                <th>&{'description'}</th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			#{list items:componentTypes, as:'type'}
+  				<tr>
+                    <td><input type="checkbox" name="selectedTypes" value="${type.id}"> </td>
+                    <td>${type.description}</td>
+
+  				</tr>
+  			#{/list}
+  		</tbody>
+	</table>
+  </div>
+  #{/if}
+  #{else}
+  <div class="wrap container">
+  	<p>&{'types.no.results'}</p>
+  </div>
+  #{/else}
+    <div class="wrap container">
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'new'}</button>
+            #{if componentTypes != null && componentTypes.size()>0}
+            <input type="submit" class="btn btn-primary" formaction="/Administration/removeTypes" value="&{'remove'}"/>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'edit'}</button>
+            #{/if}
+            <button type="button" class="btn btn-primary">&{'cancel'}</button>
+        </div>
+    </div>
+<!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">&{'types.add'}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="description">&{'description'}: </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="description" name="description" />
+                        </div>
+                        <label class="col-sm-2 control-label" >&{'select'}: </label>
+                        <div class="col-sm-10">
+                            #{list items:features, as:'feature'}
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="${feature.id}" name="selectedFeatures">${feature.description}
+                                </label>
+                            </div>
+                            #{/list}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">&{'close'}</button>
+                    <button type="submit" class="btn btn-primary">&{'save'}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+#{/form}
+<div id="footer">
+  <p class="right">Design: <a href="#">EAZ</a></p>
+  <p>&copy; Copyright 2013 <a href="#">Titus Intelligence</a> &middot; All Rights Reserved</p>
+</div>

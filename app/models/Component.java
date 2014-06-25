@@ -1,6 +1,7 @@
 package models;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -22,10 +23,8 @@ public class Component extends Model {
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	public ComponentType type;
 	public String partNumber;
-	public Blob image;
-	public BigDecimal price;
-//	public Map<String, String> metadata;
-//	public List<String> deviceCompatibility;
+    @OneToMany(mappedBy="component",cascade=CascadeType.PERSIST)
+    List<ComponentFeature> compatibility;
 
 	@Override
 	public String toString() {

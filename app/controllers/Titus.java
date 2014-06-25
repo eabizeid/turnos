@@ -159,7 +159,7 @@ public class Titus extends Controller {
 
 		String checkoutURL = StringUtils.EMPTY;
 		try {
-			JSONObject preference = mp.createPreference("{'items':[{'title':'"+component.toString()+"','quantity':1,'currency_id':'ARS','unit_price':" + component.price + "}]}");
+			JSONObject preference = mp.createPreference("{'items':[{'title':'"+component.toString()+"','quantity':1,'currency_id':'ARS','unit_price':" + "component.price" + "}]}");
 			checkoutURL = preference.getJSONObject("response").getString("sandbox_init_point");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -175,5 +175,9 @@ public class Titus extends Controller {
 		List<Mail> clients = Mail.findAll(); 
 		render(clients);
 	}
+	
+	public static void about() {
+        render();
+    }
 
 }
