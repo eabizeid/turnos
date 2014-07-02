@@ -1,6 +1,6 @@
 
 
-  #{if components != null && components.size()>0}
+  #{if salablePart != null }
   <div>
   <h3>Resul<span class="red">tados de </span> ${trademark} ${model} ${type}</h3>
   	<div class= "table-responsive">
@@ -9,21 +9,19 @@
 	  			<tr>
 	  				<th>Marca</th>
 	  				<th>Tipo</h>
-	  				<th>Modelo</th>
-	  				<th>Nro de parte</th>
+                    <th>Modelo</th>
+                    <th>Descripcion</th>
 	  				<th></th>
 	  			</tr>
 	  		</thead>
 	  		<tbody>
-	  			#{list items:components, as:'component'}
 	  				<tr>
 	  					<td>${component.trademark.description}</td>
-	  					<td>${component.type.description}</td>
-	  					<td>${component.model}</td>
-	  					<td>${component.partNumber}</td>
+	  					<td>${salablePart.type.description}</td>
+                        <td>${component.model}</td>
+	  					<td>${salablePart.description}</td>
 	  					<td><button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" onclick="javascript: openDetail(${component.id});">Ver</button></td>
 	  				</tr>
-	  			#{/list}
 	  		</tbody>
 		</table>
 	</div>

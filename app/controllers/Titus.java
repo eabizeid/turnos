@@ -5,11 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import mercadopago.MP;
-import models.Component;
-import models.ComponentTrademark;
-import models.ComponentType;
-import models.Mail;
-import models.Pending;
+import models.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.mail.EmailException;
@@ -18,6 +14,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import play.mvc.Controller;
+import service.engine.CompatibilityEngine;
 import service.feeder.FileFeeder;
 import service.mailer.MailSender;
 
@@ -48,6 +45,7 @@ public class Titus extends Controller {
 			e.printStackTrace();
 		}
 		String query = StringUtils.EMPTY;
+        Part salablePart = null;
 		if (components.isEmpty()) {
 			if (model != null && !model.isEmpty()) {
 				query = "modelo: ".concat(model);
@@ -58,11 +56,27 @@ public class Titus extends Controller {
 			if (type != null && !type.isEmpty()) {
 				query = query.concat("; tipo: ").concat(type);
 			}
-		}
+		} else {
+            Component searchedComponent = components.get(0);
+            renderArgs.put("component", searchedComponent);
+            List<Part> parts = Lists.newArrayList();
+            parts = Part.find("select p from Part p, ComponentType ty  where ty.description = ?", searchedComponent.type.description).fetch();
+            //Analizo compatibilidad
+            for (Part part : parts) {
+                if (CompatibilityEngine.getEngine().areThereCompatibility(part, searchedComponent)) {
+                    salablePart = part;
+                    break;
+                }
+            }
+
+        }
+        renderArgs.put("model", model);
+        renderArgs.put("trademark", trademark);
+        renderArgs.put("type", type);
 		renderArgs.put("query", query);
 		renderArgs.put("step", 2);
 		
-		render(components);
+		render(salablePart);
     }
 	
 	public static void noResults(String mail, String query) {

@@ -41,10 +41,18 @@ marks.no.results=No se han encontrado marcas
 marks.page.description=Las marca representa al fabricante del componente
 marks.add=Agregar Marca
 
-Part
+#Part
 
 part=Parte
 parts=Partes
 parts.no.results=No se han encontrado partes
-parts.page.description=Una parte es el producto vendible asociado a un componente.
+parts.page.description=Una parte es el producto solicitado por un cliente.
 parts.add=Agregar parte
+
+#Components
+
+component=Componente
+components=Componentes
+components.no.results=No se han encontrado componentes
+components.page.description=Un componente es el producto solicitado por un cliente
+parts.add=Agregar componente

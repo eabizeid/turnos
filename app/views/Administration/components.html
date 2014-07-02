@@ -2,33 +2,37 @@
 #{set title:'Titus' /}
      
 
-#{form @Administration.savePart(), encpart:'multipart/form-data', class:"form-horizontal"}
+#{form @Administration.saveComponent(), encpart:'multipart/form-data', class:"form-horizontal"}
 <div id="teaser">
   <div class="wrap">
     <div id="image"></div>
     <div class="box">
-      <h2><em title="Sharing and breakdowning devices">&{'parts'}</em></h2>
-      <p>&{'parts.page.description'}</p>
+      <h2><em title="Sharing and breakdowning devices">&{'components'}</em></h2>
+      <p>&{'components.page.description'}</p>
     </div>
   </div>
 </div>
 
-  #{if parts != null && parts.size()>0}
+  #{if components != null && components.size()>0}
   <div class="wrap container">
   	<table id="results" class="table table-striped">
   		<thead>
   			<tr>
                 <th></th>
-                <th>&{'description'}</th>
+                <th>&{'trademark'}</th>
+                <th>&{'model'}</th>
                 <th>&{'type'}</th>
+                <th>&{'partNumber'}</th>
   			</tr>
   		</thead>
   		<tbody>
-  			#{list items:parts, as:'part'}
+  			#{list items:components, as:'component'}
   				<tr>
-                    <td><input type="checkbox" name="selectedParts" value="${part.id}"> </td>
-                    <td>${part.description}</td>
-                    <td>${part.type.description}</td>
+                    <td><input type="checkbox" name="selectedComponents" value="${component.id}"> </td>
+                    <td>${component.trademark.description}</td>
+                    <td>${component.model}</td>
+                    <td>${component.type.description}</td>
+                    <td>${component.partNumber}</td>
 
   				</tr>
   			#{/list}
@@ -38,14 +42,14 @@
   #{/if}
   #{else}
   <div class="wrap container">
-  	<p>&{'parts.no.results'}</p>
+  	<p>&{'components.no.results'}</p>
   </div>
   #{/else}
     <div class="wrap container">
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'new'}</button>
-            #{if parts != null && parts.size()>0}
-            <input type="submit" class="btn btn-primary" formaction="/Administration/removeParts" value="&{'remove'}"/>
+            #{if components != null && components.size()>0}
+            <input type="submit" class="btn btn-primary" formaction="/Administration/removeComponents" value="&{'remove'}"/>
             <button part="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'edit'}</button>
             #{/if}
             <button type="button" class="btn btn-primary">&{'cancel'}</button>
@@ -57,13 +61,25 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">&{'parts.add'}</h4>
+                    <h4 class="modal-title" id="myModalLabel">&{'components.add'}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="model">&{'model'}: </label>
                         <div class="col-sm-10">
-                            <input part="text" class="form-control" id="model" name="model" />
+                            <input type="text" class="form-control" id="model" name="model" />
+                        </div>
+                        <label class="col-sm-2 control-label" for="partNumber">&{'partNUmber'}: </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="partNUmber" name="partNumber" />
+                        </div>
+                        <label class="col-sm-2 control-label" >&{'trademark'}: </label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="trademark">
+                                #{list items:trademarks, as:'mark'}
+                                    <option value="${mark.id}" label="${mark.description}" />
+                                #{/list}
+                            </select>
                         </div>
                         <label class="col-sm-2 control-label" >&{'select'}: </label>
                         <div class="col-sm-8">
@@ -79,7 +95,7 @@
                                 %}
                                 <div class="form-group">
                                     <label for="${feature.description}${type.id}">${feature.description}</label>
-                                    <input type="text" id="${feature.description}${type.id}" class="form-control" name="partFeatures">
+                                    <input type="text" id="${feature.description}${type.id}" class="form-control" name="componentFeatures">
                                 </div>
                                 %{
                                     }

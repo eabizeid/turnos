@@ -122,12 +122,60 @@ public class Administration extends Controller {
         parts();
     }
 
-    public static void removePart(List<Long> selectedTypes) {
-        for (Long id : selectedTypes) {
-            ComponentType type = ComponentType.findById(id);
-            type.delete();
+    public static void removePart(List<Long> selectedComponents) {
+        for (Long id : selectedComponents) {
+            Part part = Part.findById(id);
+            part.delete();
         }
-        componentTypes();
+        parts();
+    }
+
+
+    //PARTS
+
+    public static void components() {
+        List<ComponentTrademark> trademarks = ComponentTrademark.findAll();
+        renderArgs.put("trademarks", trademarks);
+        List<ComponentType> types = ComponentType.findAll();
+        renderArgs.put("types", types);
+        List<Component> components = Component.findAll();
+        renderArgs.put("components", components);
+        render();
+    }
+
+    public static void saveComponent(String model, Long trademark, Long selectedType, String partNumber, List<String> componentFeatures) {
+        //Busco el tipo seleccionado
+        ComponentType type = ComponentType.findById(selectedType);
+        if (type != null) {
+            int i = 0;
+            List<ComponentFeature> componentFeaturesList = Lists.newArrayList();
+            Component component = new Component();
+            for (Feature feature : type.features) {
+                ComponentFeature componentFeature = new ComponentFeature();
+                componentFeature.specification = feature;
+                componentFeature.value = componentFeatures.get(i);
+                componentFeature.component = component;
+                componentFeaturesList.add(componentFeature);
+                i++;
+            }
+            component.model = model;
+            component.trademark = ComponentTrademark.findById(trademark);
+            component.partNumber = partNumber;
+            component.compatibility = componentFeaturesList;
+            component.type = type;
+
+            component.save();
+        }
+
+        components();
+    }
+
+    public static void removeComponent(List<Long> selectedComponent) {
+        for (Long id : selectedComponent) {
+            Component component = Component.findById(id);
+            component.delete();
+        }
+        components();
     }
 
 }

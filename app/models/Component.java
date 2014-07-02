@@ -24,7 +24,7 @@ public class Component extends Model {
 	public ComponentType type;
 	public String partNumber;
     @OneToMany(mappedBy="component",cascade=CascadeType.PERSIST)
-    List<ComponentFeature> compatibility;
+    public List<ComponentFeature> compatibility;
 
 	@Override
 	public String toString() {
