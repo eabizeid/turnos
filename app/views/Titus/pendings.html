@@ -5,6 +5,16 @@
 
 <script type="text/javascript">
 
+    var showFeatures = function() {
+        hideAllFeaturesDivs()
+        divToShow = 'feature' + $('#componentType').val()    ;
+        $("#"+divToShow).show()
+    }
+
+    var hideAllFeaturesDivs = function() {
+        $("div[id^='feature']").hide()
+    }
+
 /* Default class modification */
 $.extend( $.fn.dataTableExt.oStdClasses, {
 	"sSortAsc": "header headerSortDown",
@@ -106,7 +116,9 @@ $.extend( $.fn.dataTableExt.oPagination, {
 /* Table initialisation */
 $(document).ready(function() {
 	$('.componentImage').preimage();
-	$('#results').dataTable( {
+
+    hideAllFeaturesDivs()
+    $('#results').dataTable( {
 		"sDom": "<'row'<'span4'l><'span6'f>r>t<'row'<'span5'i><'span5'p>>",
 		"sPaginationType": "bootstrap",
 		"oLanguage": {
@@ -132,9 +144,10 @@ setPendingToResolve = function (toResolve, question) {
 	$('#componentTrademark').val($tradeValue.val());
 	$typeValue = $('#componentType option:text-equals("' + breakdownComponent[2].split(": ")[1].trim() + '")');
 	$('#componentType').val($typeValue.val());
-	
+    showFeatures()
 	
 }
+
 </script>
 <style>
 .prev_container{
@@ -208,12 +221,28 @@ setPendingToResolve = function (toResolve, question) {
     				</div>
     				<label class="col-sm-2 control-label" for="componentType"> Tipo: </label>
     				<div class="col-sm-4">
-    					<select class="form-control" id="componentType"  name="idType" >
+    					<select class="form-control" id="componentType"  name="idType" onchange="javascript:showFeatures()">
     						#{list items:types, as:'type'}
     							<option class="type" value="${type.id}">${type.description}</option>
     						#{/list}
     					</select>
     				</div>
+                    #{list items:types, as:'type'}
+                        <div id="feature${type.id}">
+
+                        %{
+                            for(feature in type.features) {
+                        %}
+                            <div class="form-group">
+                                <label for="${feature.description}${type.id}">${feature.description}</label>
+                                <input type="text" id="${feature.description}${type.id}" class="form-control" name="componentFeatures">
+                            </div>
+                        %{
+                            }
+                            }%
+                        </div>
+                     #{/list}
+
   				</div>
 				<div class="form-group">
     				<label class="col-sm-2 control-label" for="component.partNumber">Número de parte: </label>
