@@ -98,6 +98,7 @@ public class Titus extends Controller {
 		pending.question = query;
 		pending.timeInMs = (new Date()).getTime();
 		pending.save();
+
 		SimpleEmail email = new SimpleEmail();
 		try {
 			email.setFrom("pruebas@pop-tech.com.ar");
@@ -126,39 +127,11 @@ public class Titus extends Controller {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void pendings() {
-		List<Pending> pendings = Pending.findAll();
-		renderArgs.put("trademarks", ComponentTrademark.findAll());
-		renderArgs.put("types", ComponentType.findAll());
-		render(pendings);
-	}
-	
-	public static void resolvePending(Component component, Long idType, Long idTrademark, String pendingToResolve) {
-		try { 
-			
-			component.trademark = ComponentTrademark.findById(idTrademark);
-			component.type = ComponentType.findById(idType);
-			component.save();
-			Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
-			long responseTime = (new Date()).getTime() - pending.timeInMs;
-			for (Mail mail : pending.mails) {
-				
-				MailSender sender = new MailSender();
-				sender.sendEmail(mail, component, responseTime, generateCheckoutURL(component));
-				
-			}
-			((Pending)Pending.findById(Long.valueOf(pendingToResolve))).delete();
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		pendings();
-	}
-	
+
+
 	public static void viewDetail(String componentId) {
 		Component component = Component.findById(Long.valueOf(componentId));
+
 		renderArgs.put("checkoutURL", generateCheckoutURL(component)); 
 
 		render(component);
@@ -185,11 +158,7 @@ public class Titus extends Controller {
 		return checkoutURL;
 	}
 	
-	public static void clients() {
-		List<Mail> clients = Mail.findAll(); 
-		render(clients);
-	}
-	
+
 	public static void about() {
         render();
     }

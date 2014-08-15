@@ -1,17 +1,35 @@
 package controllers;
 
 import com.google.common.collect.Lists;
+import mercadopago.MP;
 import models.*;
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.junit.Before;
 import play.mvc.Controller;
+import play.mvc.With;
+import service.mailer.MailSender;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author ezeid on 6/18/14.
  */
+@With(Secure.class)
 public class Administration extends Controller {
 
-
+    @Before
+    static void setConnectedUser() {
+        if(Security.isConnected()) {
+            User user = User.find("byEmail", Security.connected()).first();
+            renderArgs.put("user", user.fullname);
+        }
+    }
+    public static void index() {
+        render();
+    }
     //FEATURES
 
     public static void features() {
@@ -178,4 +196,57 @@ public class Administration extends Controller {
         components();
     }
 
+    public static void pendings() {
+        List<Pending> pendings = Pending.findAll();
+        renderArgs.put("trademarks", ComponentTrademark.findAll());
+        renderArgs.put("types", ComponentType.findAll());
+        render(pendings);
+    }
+
+    public static void resolvePending(Component component, Long idType, Long idTrademark, String pendingToResolve) {
+        try {
+
+            component.trademark = ComponentTrademark.findById(idTrademark);
+            component.type = ComponentType.findById(idType);
+            component.save();
+            Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
+            long responseTime = (new Date()).getTime() - pending.timeInMs;
+            for (Mail mail : pending.mails) {
+
+                MailSender sender = new MailSender();
+                sender.sendEmail(mail, component, responseTime, generateCheckoutURL(component));
+
+            }
+            ((Pending)Pending.findById(Long.valueOf(pendingToResolve))).delete();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        pendings();
+    }
+    private static String generateCheckoutURL(Component component) {
+
+        String clientId = "8077350156322774";
+        String clientSecret = "8Hl48rbM9UWPjQW3ug0xjCaujPQ5bcpk";
+
+        MP mp = new MP(clientId, clientSecret);
+
+        String checkoutURL = StringUtils.EMPTY;
+        try {
+            JSONObject preference = mp.createPreference("{'items':[{'title':'"+component.toString()+"','quantity':1,'currency_id':'ARS','unit_price':" + "component.price" + "}]}");
+            checkoutURL = preference.getJSONObject("response").getString("sandbox_init_point");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return checkoutURL;
+    }
+    public static void clients() {
+        List<Mail> clients = Mail.findAll();
+        render(clients);
+    }
 }
