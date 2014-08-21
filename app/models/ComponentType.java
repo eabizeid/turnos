@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 import play.db.jpa.Model;
 
 @Entity
-public class ComponentType extends Model {
+public class  ComponentType extends Model {
 	public String description;
 
     @OneToMany(mappedBy="type", cascade=CascadeType.ALL)
