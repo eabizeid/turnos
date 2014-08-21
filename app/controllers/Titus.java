@@ -129,10 +129,12 @@ public class Titus extends Controller {
 	}
 
 
-	public static void viewDetail(String componentId) {
+	public static void viewDetail(String componentId, String partId) {
 		Component component = Component.findById(Long.valueOf(componentId));
 
-		renderArgs.put("checkoutURL", generateCheckoutURL(component)); 
+        Part part = Part.findById(Long.valueOf(partId));
+		//renderArgs.put("checkoutURL", generateCheckoutURL(component));
+        renderArgs.put("part", part);
 
 		render(component);
 	}

@@ -16,10 +16,10 @@ $(document).ready(function() {
 	
 } );
 
-openDetail = function(componentId) {
-	  var action = #{jsAction @viewDetail(':componentId') /}
+openDetail = function(componentId, partId) {
+	  var action = #{jsAction @viewDetail(':componentId', ':partId') /}
 	  $("#componentDetail").html("");
-	   $.post(action({componentId: componentId}), function(data) {
+	   $.post(action({componentId: componentId , partId: partId}), function(data) {
           $("#componentDetail").append(data);
           $(".fancybox").fancybox({
         	  	type : 'image',

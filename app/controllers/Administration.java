@@ -37,8 +37,13 @@ public class Administration extends Controller {
         render(features);
     }
 
-    public static void saveFeature(String description) {
-        Feature feature = new Feature();
+    public static void saveFeature(String description, Long selectedFeature) {
+        Feature feature = null;
+        if (selectedFeature != null) {
+            feature = Feature.findById(selectedFeature);
+        } else {
+            feature = new Feature();
+        }
         feature.description = description;
         feature.save();
         features();
@@ -203,12 +208,24 @@ public class Administration extends Controller {
         render(pendings);
     }
 
-    public static void resolvePending(Component component, Long idType, Long idTrademark, String pendingToResolve) {
+    public static void resolvePending(Component component, Long idType, Long idTrademark, String pendingToResolve, List<String> componentFeatures) {
         try {
 
             component.trademark = ComponentTrademark.findById(idTrademark);
-            component.type = ComponentType.findById(idType);
+            ComponentType type = ComponentType.findById(idType);
+            component.type = type;
+            List<ComponentFeature> compatibility = Lists.newArrayList();
+            List<Feature> features = type.features;
+            for  (int i=0; i < features.size(); i++) {
+                ComponentFeature componentFeature = new ComponentFeature();
+                componentFeature.specification = features.get(i);
+                componentFeature.value = componentFeatures.get(i);
+                componentFeature.component = component;
+                compatibility.add(componentFeature);
+            }
+            component.compatibility = compatibility;
             component.save();
+            generatePart(component, type);
             Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
             long responseTime = (new Date()).getTime() - pending.timeInMs;
             for (Mail mail : pending.mails) {
@@ -225,6 +242,24 @@ public class Administration extends Controller {
         }
         pendings();
     }
+
+    private static void generatePart(Component component, ComponentType type) {
+        Part part = new Part();
+        part.description= component.type.description + " " + component.model;
+        List<PartFeature> features = Lists.newArrayList();
+        for (ComponentFeature componentFeature : component.compatibility) {
+            Feature feature = Feature.findById(componentFeature.specification.getId());
+            PartFeature partFeature = new PartFeature();
+            partFeature.specification = feature;
+            partFeature.value = componentFeature.value;
+            partFeature.part = part;
+            features.add(partFeature);
+        }
+        part.partFeature = features;
+        part.type= type;
+        part.save();
+    }
+
     private static String generateCheckoutURL(Component component) {
 
         String clientId = "8077350156322774";
