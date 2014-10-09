@@ -1,7 +1,19 @@
 #{extends 'main.html' /}
 #{set title:'Titus' /}
-     
 
+<script src="@{'/public/javascripts/jquery.preimage.js'}" type="text/javascript" charset="utf-8"></script>
+<style>
+    .prev_container{
+        overflow: auto;
+        width: 300px;
+        height: 135px;
+    }
+
+    .prev_thumb{
+        margin: 10px;
+        height: 100px;
+    }
+</style>
 #{form @Administration.savePart(), encpart:'multipart/form-data', class:"form-horizontal"}
 <div id="teaser">
   <div class="wrap">
@@ -65,6 +77,11 @@
                         <div class="col-sm-10">
                             <input part="text" class="form-control" id="model" name="model" />
                         </div>
+                        <label class="col-sm-2 control-label" for="componentImage">Imágen </label>
+                        <div class="col-sm-10">
+                            <input class="componentImage" id="componentImage" type='file' name="part.image" />
+                            <span class="col-sm-12" id="prev_componentImage" ></span>
+                        </div>
                         <label class="col-sm-2 control-label" >&{'select'}: </label>
                         <div class="col-sm-8">
                             #{list items:types, as:'type'}
@@ -78,8 +95,10 @@
                                     for(feature in type.features) {
                                 %}
                                 <div class="form-group">
-                                    <label for="${feature.description}${type.id}">${feature.description}</label>
-                                    <input type="text" id="${feature.description}${type.id}" class="form-control" name="partFeatures">
+                                    <label class="col-sm-2 control-label" for="${feature.description}${type.id}">${feature.description}</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="${feature.description}${type.id}" class="form-control" name="partFeatures">
+                                    </div>
                                 </div>
                                 %{
                                     }
@@ -104,7 +123,8 @@
 <script type="text/javascript">
         <!--
             $(document).ready(function(){
-                hideAllFeaturesDivs()
+                hideAllFeaturesDivs();
+                $('.componentImage').preimage();
 
             })
             var showFeatures = function(id) {

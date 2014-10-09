@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class ComponentFeature extends Model{
+
     @ManyToOne(cascade= CascadeType.PERSIST)
     public Feature specification;
     public String value;

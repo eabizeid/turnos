@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Before;
+import play.db.jpa.Blob;
 import play.mvc.Controller;
 import play.mvc.With;
 import service.mailer.MailSender;
@@ -208,7 +209,7 @@ public class Administration extends Controller {
         render(pendings);
     }
 
-    public static void resolvePending(Component component, Long idType, Long idTrademark, String pendingToResolve, List<String> componentFeatures) {
+    public static void resolvePending(Component component, Long idType, Long idTrademark, String pendingToResolve, List<String> componentFeatures, Blob image) {
         try {
 
             component.trademark = ComponentTrademark.findById(idTrademark);
@@ -225,7 +226,7 @@ public class Administration extends Controller {
             }
             component.compatibility = compatibility;
             component.save();
-            generatePart(component, type);
+            generatePart(component, type, image);
             Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
             long responseTime = (new Date()).getTime() - pending.timeInMs;
             for (Mail mail : pending.mails) {
@@ -243,7 +244,7 @@ public class Administration extends Controller {
         pendings();
     }
 
-    private static void generatePart(Component component, ComponentType type) {
+    private static void generatePart(Component component, ComponentType type,  Blob image) {
         Part part = new Part();
         part.description= component.type.description + " " + component.model;
         List<PartFeature> features = Lists.newArrayList();
@@ -257,6 +258,7 @@ public class Administration extends Controller {
         }
         part.partFeature = features;
         part.type= type;
+        part.image = image;
         part.save();
     }
 

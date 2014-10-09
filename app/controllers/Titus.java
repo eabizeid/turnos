@@ -1,9 +1,12 @@
 package controllers;
 
 import java.io.File;
+import java.lang.reflect.Modifier;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import mercadopago.MP;
 import models.*;
 
@@ -21,8 +24,9 @@ import service.mailer.MailSender;
 import com.google.common.collect.Lists;
 
 public class Titus extends Controller {
-	
-	public static void search() {
+
+
+    public static void search() {
 		renderArgs.put("trademarks", ComponentTrademark.findAll());
 		renderArgs.put("types", ComponentType.findAll());
 		renderArgs.put("allModels", Component.findAll());
@@ -165,4 +169,51 @@ public class Titus extends Controller {
         render();
     }
 
+    public static void getACompatibilityPart(String model, String type, String trademark) {
+       Part part = searchAPart(trademark, model, type);
+       renderJSON(part.toJson());
+    }
+
+    public static Part searchAPart(String trademark, String model, String type) {
+        List<Component> components = Lists.newArrayList();
+        try {
+
+            components = Component.find("select c from Component c," +
+                    "								   ComponentTrademark tr, ComponentType ty " +
+                    "						where c.trademark = tr and c.type = ty and tr.description = ? and" +
+                    " 							  UPPER(c.model) = ? and ty.description = ?", trademark, StringUtils.upperCase(model), type).fetch();
+
+
+        } catch( Exception e) {
+            e.printStackTrace();
+        }
+        String query = StringUtils.EMPTY;
+        Part salablePart = null;
+        if (components.isEmpty()) {
+            if (model != null && !model.isEmpty()) {
+                query = "modelo: ".concat(model);
+            }
+            if (trademark != null && !trademark.isEmpty()) {
+                query =query.concat("; marca: ").concat(trademark);
+            }
+            if (type != null && !type.isEmpty()) {
+                query = query.concat("; tipo: ").concat(type);
+            }
+        } else {
+            Component searchedComponent = components.get(0);
+            renderArgs.put("component", searchedComponent);
+            List<Part> parts = Lists.newArrayList();
+            parts = Part.find("select p from Part p, ComponentType ty  where ty.description = ?", searchedComponent.type.description).fetch();
+            //Analizo compatibilidad
+            for (Part part : parts) {
+                if (CompatibilityEngine.getEngine().areThereCompatibility(part, searchedComponent)) {
+                    salablePart = part;
+                    break;
+                }
+            }
+
+        }
+
+        return salablePart;
+    }
 }

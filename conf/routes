@@ -18,3 +18,5 @@ GET     /public/                                staticDir:public
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
+
+GET     /part/{model}/{type}/{trademark}          Titus.getACompatibilityPart
