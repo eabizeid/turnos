@@ -31,8 +31,10 @@ public class CompatibilityEngine {
             System.out.println("index: " + i);
             PartFeature partFeature = part.partFeature.get(i);
             System.out.println("Part Feature: " + partFeature);
+            System.out.println("Part Feature: " + partFeature.specification);
             for (ComponentFeature componentFeature : component.compatibility){
                 System.out.println("Component Feature: " + componentFeature);
+                System.out.println("Component Feature: " + componentFeature.specification);
                 if (componentFeature.specification.description.equals(partFeature.specification.description)  && componentFeature.value == partFeature.value) {
                     equalsMap.add( Boolean.TRUE);
                     break;
