@@ -26,9 +26,12 @@ public class CompatibilityEngine {
     public boolean areThereCompatibility(Part part, Component component) {
         Map<PartFeature, Boolean> equalsMap = Maps.newHashMap();
         for (int i = 0; i < part.partFeature.size(); i++) {
+            System.out.println("index: " + i);
             PartFeature partFeature = part.partFeature.get(i);
+            System.out.println("Part Feature: " + partFeature);
             equalsMap.put(partFeature, Boolean.FALSE);
             for (ComponentFeature componentFeature : component.compatibility){
+                System.out.println("Component Feature: " + componentFeature);
                 if (componentFeature.specification.equals(partFeature.specification)  && componentFeature.value == partFeature.value) {
                     equalsMap.put(partFeature, Boolean.TRUE);
                     break;
