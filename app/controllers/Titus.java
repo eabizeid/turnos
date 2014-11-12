@@ -229,6 +229,7 @@ public class Titus extends Controller {
             }
         } else {
             Component searchedComponent = components.get(0);
+            System.out.println("component encontrado y buscado " + searchedComponent);
             renderArgs.put("component", searchedComponent);
             List<Part> parts = Lists.newArrayList();
             parts = Part.find("select p from Part p, ComponentType ty  where ty.description = ?", StringUtils.upperCase(searchedComponent.type.description)).fetch();
