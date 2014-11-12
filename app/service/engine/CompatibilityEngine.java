@@ -1,5 +1,6 @@
 package service.engine;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import models.Component;
 import models.ComponentFeature;
@@ -8,6 +9,7 @@ import models.PartFeature;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,28 +26,22 @@ public class CompatibilityEngine {
     }
 
     public boolean areThereCompatibility(Part part, Component component) {
-        Map<PartFeature, Boolean> equalsMap = Maps.newHashMap();
+        List<Boolean> equalsMap = Lists.newArrayList();
         for (int i = 0; i < part.partFeature.size(); i++) {
             System.out.println("index: " + i);
             PartFeature partFeature = part.partFeature.get(i);
             System.out.println("Part Feature: " + partFeature);
-            equalsMap.put(partFeature, Boolean.FALSE);
             for (ComponentFeature componentFeature : component.compatibility){
                 System.out.println("Component Feature: " + componentFeature);
                 if (componentFeature.specification.equals(partFeature.specification)  && componentFeature.value == partFeature.value) {
-                    equalsMap.put(partFeature, Boolean.TRUE);
+                    equalsMap.add( Boolean.TRUE);
                     break;
                 }
             }
 
         }
-        for (Boolean compatibility : equalsMap.values()) {
-            System.out.println(compatibility);
-            if(!compatibility) {
-                return compatibility;
-            }
-        }
-        return true;
+
+        return equalsMap.size() == part.partFeature.size();
     }
 
 }
