@@ -26,7 +26,8 @@ public class CompatibilityEngine {
                 @Override
                 public boolean evaluate(Object o) {
                     ComponentFeature componentFeature = (ComponentFeature) o;
-
+                    System.out.println("Component Specification : " + componentFeature.specification + " Part soecification: " + partFeature.specification);
+                    System.out.println("Component feature value: " +  componentFeature.value + " Part feature value: " + partFeature.value);
                     return componentFeature.specification.equals(partFeature.specification) && componentFeature.value == partFeature.value;
                 }
             });
