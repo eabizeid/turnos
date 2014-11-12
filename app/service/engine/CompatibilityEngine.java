@@ -21,7 +21,8 @@ public class CompatibilityEngine {
     }
 
     public boolean areThereCompatibility(Part part, Component component) {
-        for (final PartFeature partFeature : part.partFeature) {
+        for (int i = 0; i < part.partFeature.size(); i++) {
+            final PartFeature partFeature = part.partFeature.get(i);
             boolean exists = CollectionUtils.exists(component.compatibility, new Predicate() {
                 @Override
                 public boolean evaluate(Object o) {
