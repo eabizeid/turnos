@@ -169,7 +169,7 @@ public class Titus extends Controller {
         render();
     }
 
-    public static void getACompatibilityPart(String model, String type, String trademark, String userImageURL) {
+    public static void getACompatibilityPart(String model, String type, String trademark) {
        Part part = searchAPart(trademark, model, type);
        renderJSON(part.toJson());
     }

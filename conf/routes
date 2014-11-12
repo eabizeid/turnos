@@ -20,6 +20,7 @@ GET     /feature/{id}                           Titus.getAFeature
 GET     /trademark/{id}                         Titus.getATrademark
 GET     /type/{id}                              Titus.getAComponentType
 GET     /part/{model}/{type}/{trademark}        Titus.getACompatibilityPart
+GET     /images/{id}                            Titus.showImage
 
 
 # Catch all
