@@ -35,10 +35,14 @@ public class Part extends Model {
         buffer.append("\"image\": \"" + this.image + "\", ");
 
         buffer.append("\"partfeatures\": [");
-        for (PartFeature pf : this.partFeature) {
+        for (int i = 0; i< this.partFeature.size()-1; i++) {
+            PartFeature pf =this.partFeature.get(i);
             buffer.append("{ \"specification\": \"" + pf.specification.description + "\", ");
             buffer.append(" \"value\": \"" + pf.value.toString() + "\" },");
         }
+        PartFeature pf =this.partFeature.get(this.partFeature.size()-1);
+        buffer.append("{ \"specification\": \"" + pf.specification.description + "\", ");
+        buffer.append(" \"value\": \"" + pf.value.toString() + "\" },");
         buffer.append("]");
 
         buffer.append("}");
