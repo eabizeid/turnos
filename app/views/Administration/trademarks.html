@@ -41,7 +41,7 @@
   #{/else}
     <div class="wrap container">
         <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'new'}</button>
+            <button type="button"  onclick="javascript:$('input:checkbox').removeAttr('checked');" class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'new'}</button>
             #{if marks != null && marks.size()>0}
             <input type="submit" class="btn btn-primary" formaction="/Administration/removeMark" value="&{'remove'}"/>
             <button type="button" onclick="javascript:getTrademark();"  class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'edit'}</button>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="javascript:('input:checkbox').removeAttr('checked');" class="btn btn-default" data-dismiss="modal">&{'close'}</button>
+                    <button type="button" onclick="javascript:$('input:checkbox').removeAttr('checked');" class="btn btn-default" data-dismiss="modal">&{'close'}</button>
                     <button type="submit" class="btn btn-primary">&{'save'}</button>
                 </div>
             </div><!-- /.modal-content -->
