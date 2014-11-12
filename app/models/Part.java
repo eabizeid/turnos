@@ -37,7 +37,7 @@ public class Part extends Model {
         buffer.append("\"partfeatures\": [");
         for (PartFeature pf : this.partFeature) {
             buffer.append("{ \"specification\": \"" + pf.specification.description + "\", ");
-            buffer.append(" \"value\": \"" + pf.value.toString() + "\" }");
+            buffer.append(" \"value\": \"" + pf.value.toString() + "\" },");
         }
         buffer.append("]");
 
