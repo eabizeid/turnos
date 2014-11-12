@@ -23,7 +23,7 @@ public class Component extends Model {
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	public ComponentType type;
 	public String partNumber;
-    @OneToMany(mappedBy="component",cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy="component",cascade=CascadeType.ALL)
     public List<ComponentFeature> compatibility;
 
 	@Override
