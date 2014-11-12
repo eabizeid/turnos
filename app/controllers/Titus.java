@@ -170,10 +170,41 @@ public class Titus extends Controller {
     }
 
     public static void getACompatibilityPart(String model, String type, String trademark) {
-       Part part = searchAPart(trademark, model, type);
+      // Part part = searchAPart(trademark, model, type);
+       Part part = new Part();
+        ComponentType componentType = new ComponentType();
+        componentType.description = "POWER ADATER";
+        componentType.id = 1L;
+        part.type = componentType;
+        part.id = 1L;
+        part.image = "/part/images/poweradapter.jpg";
+        part.description = "Descripcion de la parte";
+        part.partFeature = getPartFeatures();
        renderJSON(part.toJson());
     }
 
+    /* MOCK */
+    private  static List<PartFeature> getPartFeatures() {
+        List<PartFeature> partFeatures = Lists.newArrayList();
+        PartFeature pf = new PartFeature();
+        pf.value = "5V";
+        Feature feature = new Feature();
+        feature.id = 1L;
+        feature.description = "AMPERAJE";
+        pf.specification = feature;
+        partFeatures.add(pf);
+
+        pf = new PartFeature();
+        pf.value = "19V";
+        feature = new Feature();
+        feature.id = 1L;
+        feature.description = "VOLTAJE";
+        pf.specification = feature;
+        partFeatures.add(pf);
+        pf.specification = feature;
+
+        return partFeatures;
+    }
     public static Part searchAPart(String trademark, String model, String type) {
         List<Component> components = Lists.newArrayList();
         try {
@@ -203,7 +234,7 @@ public class Titus extends Controller {
             Component searchedComponent = components.get(0);
             renderArgs.put("component", searchedComponent);
             List<Part> parts = Lists.newArrayList();
-            parts = Part.find("select p from Part p, ComponentType ty  where ty.description = ?", searchedComponent.type.description).fetch();
+            parts = Part.find("select p from Part p, ComponentType ty  where ty.description = ?", StringUtils.upperCase(searchedComponent.type.description)).fetch();
             //Analizo compatibilidad
             for (Part part : parts) {
                 if (CompatibilityEngine.getEngine().areThereCompatibility(part, searchedComponent)) {

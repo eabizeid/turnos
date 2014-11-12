@@ -45,7 +45,7 @@ public class Administration extends Controller {
         } else {
             feature = new Feature();
         }
-        feature.description = description;
+        feature.description = StringUtils.upperCase(description);
         feature.save();
         features();
     }
@@ -74,7 +74,7 @@ public class Administration extends Controller {
             features.add(feature);
         }
         ComponentType type = new ComponentType();
-        type.description = description;
+        type.description = StringUtils.upperCase(description);
         type.features = features;
         type.save();
         componentTypes();
@@ -97,7 +97,7 @@ public class Administration extends Controller {
 
     public static void saveMark(String description) {
         ComponentTrademark mark = new ComponentTrademark();
-        mark.description = description;
+        mark.description = StringUtils.upperCase(description);
         mark.save();
         trademarks();
     }
@@ -136,7 +136,7 @@ public class Administration extends Controller {
                 partFeaturesList.add(partFeature);
                 i++;
             }
-            part.description = description;
+            part.description = StringUtils.upperCase(description);
             part.partFeature = partFeaturesList;
             part.type = type;
 
@@ -155,7 +155,8 @@ public class Administration extends Controller {
     }
 
 
-    //PARTS
+    //public static void editAPart
+    //COMPONENTS
 
     public static void components() {
         List<ComponentTrademark> trademarks = ComponentTrademark.findAll();
@@ -182,7 +183,7 @@ public class Administration extends Controller {
                 componentFeaturesList.add(componentFeature);
                 i++;
             }
-            component.model = model;
+            component.model = StringUtils.upperCase(model);
             component.trademark = ComponentTrademark.findById(trademark);
             component.partNumber = partNumber;
             component.compatibility = componentFeaturesList;
@@ -226,7 +227,7 @@ public class Administration extends Controller {
             }
             component.compatibility = compatibility;
             component.save();
-            generatePart(component, type, image);
+            generatePart(component, type, StringUtils.EMPTY);
             Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
             long responseTime = (new Date()).getTime() - pending.timeInMs;
             for (Mail mail : pending.mails) {
@@ -244,7 +245,7 @@ public class Administration extends Controller {
         pendings();
     }
 
-    private static void generatePart(Component component, ComponentType type,  Blob image) {
+    private static void generatePart(Component component, ComponentType type,  String image) {
         Part part = new Part();
         part.description= component.type.description + " " + component.model;
         List<PartFeature> features = Lists.newArrayList();

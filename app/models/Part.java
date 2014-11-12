@@ -19,7 +19,7 @@ public class Part extends Model {
     public ComponentType type;
     public String description;
     @Expose
-    public Blob image;
+    public String image;
     public BigDecimal price;
     @Expose
     @OneToMany(mappedBy="part", cascade=CascadeType.ALL)
@@ -32,6 +32,7 @@ public class Part extends Model {
         buffer.append("\"" + this.description + "\", ");
         buffer.append("\"componentType\": \"" + this.type.toString() + "\", ");
         buffer.append("\"price\": \"" + this.price + "\", ");
+        buffer.append("\"image\": \"" + this.image + "\", ");
 
         buffer.append("\"partfeatures\": [");
         for (PartFeature pf : this.partFeature) {
