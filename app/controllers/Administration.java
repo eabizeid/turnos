@@ -217,8 +217,8 @@ public class Administration extends Controller {
         components();
     }
 
-    public static void removeComponents(List<Long> selectedComponent) {
-        for (Long id : selectedComponent) {
+    public static void removeComponents(List<Long> selectedComponents) {
+        for (Long id : selectedComponents) {
             Component component = Component.findById(id);
             component.delete();
         }
