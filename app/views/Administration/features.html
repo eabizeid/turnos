@@ -79,6 +79,9 @@
 </div>
 <script type="text/javascript">
 
+    $(document).ready( function(){
+        $('input:checkbox').removeAttr('checked');
+    })
     var getFeature = function() {
         if ($('input:checked').length > 1 ) {
             alert('Puede editar una sola feature');
