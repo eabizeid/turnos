@@ -14,7 +14,7 @@
         height: 100px;
     }
 </style>
-#{form @Administration.savePart(), encpart:'multipart/form-data', class:"form-horizontal"}
+#{form @Administration.savePart(), enctype:'multipart/form-data', class:"form-horizontal"}
 <div id="teaser">
   <div class="wrap">
     <div id="image"></div>
@@ -73,13 +73,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="model">&{'description'}: </label>
+                        <label class="col-sm-2 control-label" for="description">&{'description'}: </label>
                         <div class="col-sm-10">
-                            <input part="text" class="form-control" id="model" name="model" />
+                            <input part="text" class="form-control" id="description" name="description" />
                         </div>
                         <label class="col-sm-2 control-label" for="componentImage">Imágen </label>
                         <div class="col-sm-10">
-                            <input class="componentImage" id="componentImage" type='file' name="part.image" />
+                            <input class="componentImage" id="componentImage" type="file" name="image" />
                             <span class="col-sm-12" id="prev_componentImage" ></span>
                         </div>
                         <label class="col-sm-2 control-label" >&{'select'}: </label>

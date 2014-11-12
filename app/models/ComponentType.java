@@ -28,10 +28,12 @@ public class  ComponentType extends Model {
         StringBuffer buffer = new StringBuffer(StringUtils.EMPTY);
         buffer.append("{ \"id\" :  " + this.id +", \"description\": \"" + description + "\"," );
         buffer.append("\"features\": [ ");
-        for (int i = 0; i < features.size() -1; i++) {
-            buffer.append(features.get(i) + "," );
+        if (features != null && features.size()>0) {
+            for (int i = 0; i < features.size() - 1; i++) {
+                buffer.append(features.get(i) + ",");
+            }
+            buffer.append(features.get(features.size() - 1));
         }
-        buffer.append(features.get(features.size()-1)  );
         buffer.append(" ]");
         buffer.append("  }");
         return buffer.toString();

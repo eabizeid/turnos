@@ -1,7 +1,6 @@
 package models;
 
 import com.google.gson.annotations.Expose;
-import play.db.jpa.Blob;
 import play.db.jpa.Model;
 
 import javax.persistence.*;
@@ -19,7 +18,8 @@ public class Part extends Model {
     public ComponentType type;
     public String description;
     @Expose
-    public String image;
+    @OneToOne(cascade=CascadeType.ALL)
+    public Picture image;
     public BigDecimal price;
     @Expose
     @OneToMany(mappedBy="part", cascade=CascadeType.ALL)
@@ -28,21 +28,24 @@ public class Part extends Model {
     public String toJson() {
 
         StringBuffer buffer = new StringBuffer();
-        buffer.append(" { \"part\": { \"description\": " );
+        buffer.append(" { \"part\": { \"id\":" + this.id +
+                ", \"description\": " );
         buffer.append("\"" + this.description + "\", ");
-        buffer.append("\"componentType\": \"" + this.type.toString() + "\", ");
+        buffer.append("\"componentType\": " + this.type.toString() + ", ");
         buffer.append("\"price\": \"" + this.price + "\", ");
-        buffer.append("\"image\": \"" + this.image + "\", ");
+        buffer.append("\"image\": \"/images/" + this.image.id + "\", ");
 
         buffer.append("\"partfeatures\": [");
-        for (int i = 0; i< this.partFeature.size()-1; i++) {
-            PartFeature pf =this.partFeature.get(i);
+        if (partFeature != null  && this.partFeature.size() > 0) {
+            for (int i = 0; i < this.partFeature.size() - 1; i++) {
+                PartFeature pf = this.partFeature.get(i);
+                buffer.append("{ \"specification\": \"" + pf.specification.description + "\", ");
+                buffer.append(" \"value\": \"" + pf.value.toString() + "\" },");
+            }
+            PartFeature pf = this.partFeature.get(this.partFeature.size() - 1);
             buffer.append("{ \"specification\": \"" + pf.specification.description + "\", ");
-            buffer.append(" \"value\": \"" + pf.value.toString() + "\" },");
+            buffer.append(" \"value\": \"" + pf.value.toString() + "\" }");
         }
-        PartFeature pf =this.partFeature.get(this.partFeature.size()-1);
-        buffer.append("{ \"specification\": \"" + pf.specification.description + "\", ");
-        buffer.append(" \"value\": \"" + pf.value.toString() + "\" }");
         buffer.append("]");
 
         buffer.append("}");

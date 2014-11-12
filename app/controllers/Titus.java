@@ -170,17 +170,13 @@ public class Titus extends Controller {
     }
 
     public static void getACompatibilityPart(String model, String type, String trademark, String userImageURL) {
-      // Part part = searchAPart(trademark, model, type);
-       Part part = new Part();
-        ComponentType componentType = new ComponentType();
-        componentType.description = "POWER ADATER";
-        componentType.id = 1L;
-        part.type = componentType;
-        part.id = 1L;
-        part.image = "/part/images/poweradapter.jpg";
-        part.description = "Descripcion de la parte";
-        part.partFeature = getPartFeatures();
+       Part part = searchAPart(trademark, model, type);
        renderJSON(part.toJson());
+    }
+
+    public static void getAPart(Long id) {
+        Part part = Part.findById(id);
+        renderJSON(part.toJson());
     }
 
     /* MOCK */
@@ -261,6 +257,13 @@ public class Titus extends Controller {
     public static void getAComponentType(Long id) {
         ComponentType feature = ComponentType.findById(id);
         renderJSON(feature.toString());
+    }
+
+
+    public static void showImage(Long id) {
+        Picture picture = Picture.findById(id);
+        response.setContentTypeIfNotSet(picture.image.type());
+        renderBinary(picture.image.getFile());
     }
 
 }

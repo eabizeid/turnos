@@ -71,10 +71,11 @@ public class Administration extends Controller {
 
     public static void saveType(String description, List<Long> selectedFeatures, Long selectedTypes) {
         List<Feature> features = Lists.newArrayList();
-        for(Long id : selectedFeatures) {
-            Feature feature = Feature.findById(id);
-            features.add(feature);
-        }
+        if (selectedFeatures != null)
+            for(Long id : selectedFeatures) {
+                Feature feature = Feature.findById(id);
+                features.add(feature);
+            }
         ComponentType type = null;
         if (selectedTypes != null) {
             type = ComponentType.findById(selectedTypes);
@@ -135,7 +136,7 @@ public class Administration extends Controller {
         render();
     }
 
-    public static void savePart(String description, Long selectedType, List<String> partFeatures) {
+    public static void savePart(String description, Long selectedType, List<String> partFeatures, Blob image) {
         //Busco el tipo seleccionado
         ComponentType type = ComponentType.findById(selectedType);
         if (type != null) {
@@ -150,6 +151,9 @@ public class Administration extends Controller {
                 partFeaturesList.add(partFeature);
                 i++;
             }
+            Picture picture = new Picture();
+            picture.image = image;
+            part.image = picture;
             part.description = StringUtils.upperCase(description);
             part.partFeature = partFeaturesList;
             part.type = type;
@@ -160,8 +164,8 @@ public class Administration extends Controller {
         parts();
     }
 
-    public static void removePart(List<Long> selectedComponents) {
-        for (Long id : selectedComponents) {
+    public static void removeParts(List<Long> selectedParts) {
+        for (Long id : selectedParts) {
             Part part = Part.findById(id);
             part.delete();
         }
@@ -245,7 +249,7 @@ public class Administration extends Controller {
             }
             component.compatibility = compatibility;
             component.save();
-            generatePart(component, type, StringUtils.EMPTY);
+            generatePart(component, type, image);
             Pending pending = Pending.findById(Long.valueOf(pendingToResolve));
             long responseTime = (new Date()).getTime() - pending.timeInMs;
             for (Mail mail : pending.mails) {
@@ -263,7 +267,7 @@ public class Administration extends Controller {
         pendings();
     }
 
-    private static void generatePart(Component component, ComponentType type,  String image) {
+    private static void generatePart(Component component, ComponentType type,  Blob image) {
         Part part = new Part();
         part.description= component.type.description + " " + component.model;
         List<PartFeature> features = Lists.newArrayList();
@@ -277,7 +281,9 @@ public class Administration extends Controller {
         }
         part.partFeature = features;
         part.type= type;
-        part.image = image;
+        Picture picture = new Picture();
+        picture.image = image;
+        part.image = picture;
         part.save();
     }
 
