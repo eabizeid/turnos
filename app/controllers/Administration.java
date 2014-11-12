@@ -58,6 +58,8 @@ public class Administration extends Controller {
         features();
     }
 
+
+
     //COMPONENT TYPES
 
     public static void componentTypes() {
@@ -67,13 +69,18 @@ public class Administration extends Controller {
         render(componentTypes);
     }
 
-    public static void saveType(String description, List<Long> selectedFeatures) {
+    public static void saveType(String description, List<Long> selectedFeatures, Long selectedTypes) {
         List<Feature> features = Lists.newArrayList();
         for(Long id : selectedFeatures) {
             Feature feature = Feature.findById(id);
             features.add(feature);
         }
-        ComponentType type = new ComponentType();
+        ComponentType type = null;
+        if (selectedTypes != null) {
+            type = ComponentType.findById(selectedTypes);
+        } else {
+            type = new ComponentType();
+        }
         type.description = StringUtils.upperCase(description);
         type.features = features;
         type.save();
@@ -95,8 +102,15 @@ public class Administration extends Controller {
         render(marks);
     }
 
-    public static void saveMark(String description) {
-        ComponentTrademark mark = new ComponentTrademark();
+    public static void saveMark(String description, Long selectedMarks) {
+
+        ComponentTrademark mark = null;
+
+        if (selectedMarks == null ) {
+            mark = new ComponentTrademark();
+        } else {
+            mark = ComponentTrademark.findById(selectedMarks);
+        }
         mark.description = StringUtils.upperCase(description);
         mark.save();
         trademarks();
@@ -155,7 +169,11 @@ public class Administration extends Controller {
     }
 
 
-    //public static void editAPart
+    public static void editAPart(Long partId) {
+        Part part = Part.findById(partId);
+        render(part);
+
+    }
     //COMPONENTS
 
     public static void components() {

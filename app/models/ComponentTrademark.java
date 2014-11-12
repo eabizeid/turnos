@@ -14,8 +14,9 @@ public class ComponentTrademark extends Model {
 	public String description;
 	@OneToMany(mappedBy="trademark",cascade=CascadeType.ALL)
 	public List<Component> component;
-	@Override
-	public String toString() {
-		return description;
-	}
+
+    @Override
+    public String toString() {
+        return "{ \"id\" :  " + this.id +", \"description\": \"" + description + "\"  }";
+    }
 }

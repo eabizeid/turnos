@@ -16,4 +16,9 @@ public class Feature extends Model {
     @Expose
     @ManyToMany(mappedBy = "features")
     public List<ComponentType> types;
+
+    @Override
+    public String toString() {
+        return "{ \"id\" :  " + this.id +", \"description\": \"" + description + "\"  }";
+    }
 }

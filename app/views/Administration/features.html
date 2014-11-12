@@ -44,7 +44,7 @@
             <button type="button" onclick="javascript: $('input:checkbox').removeAttr('checked');" class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'new'}</button>
             #{if features != null && features.size()>0}
             <input type="submit" class="btn btn-primary" formaction="/Administration/removeFeature" value="&{'remove'}"/>
-            <button type="button"  class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'edit'}</button>
+            <button type="button" onclick="javascript:getFeature()"  class="btn btn-primary" data-toggle="modal" data-target="#myModal">&{'edit'}</button>
             #{/if}
             <button type="button" class="btn btn-primary">&{'cancel'}</button>
         </div>
@@ -77,3 +77,25 @@
   <p class="right">Design: <a href="#">EAZ</a></p>
   <p>&copy; Copyright 2013 <a href="#">Titus Intelligence</a> &middot; All Rights Reserved</p>
 </div>
+<script type="text/javascript">
+
+    var getFeature = function() {
+        if ($('input:checked').length > 1 ) {
+            alert('Puede editar una sola feature');
+            return false;
+        };
+
+        if ($('input:checked').length < 1 ) {
+            alert('Debe editar una  feature');
+            return false;
+        }
+
+        var id = $('input:checked').val();
+        $.ajax( {
+                    url: "/feature/" + id,
+                    success: function(response) { $("#description").val(response.description); }
+                }
+
+        );
+    }
+</script>

@@ -169,7 +169,7 @@ public class Titus extends Controller {
         render();
     }
 
-    public static void getACompatibilityPart(String model, String type, String trademark) {
+    public static void getACompatibilityPart(String model, String type, String trademark, String userImageURL) {
       // Part part = searchAPart(trademark, model, type);
        Part part = new Part();
         ComponentType componentType = new ComponentType();
@@ -247,4 +247,20 @@ public class Titus extends Controller {
 
         return salablePart;
     }
+
+    public static void getAFeature(Long id) {
+        Feature feature = Feature.findById(id);
+        renderJSON(feature.toString());
+    }
+
+    public static void getATrademark(Long id) {
+        ComponentTrademark feature = ComponentTrademark.findById(id);
+        renderJSON(feature.toString());
+    }
+
+    public static void getAComponentType(Long id) {
+        ComponentType feature = ComponentType.findById(id);
+        renderJSON(feature.toString());
+    }
+
 }

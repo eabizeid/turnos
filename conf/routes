@@ -16,7 +16,13 @@ GET     /favicon.ico                            404
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
+GET     /feature/{id}                           Titus.getAFeature
+GET     /trademark/{id}                         Titus.getATrademark
+GET     /type/{id}                              Titus.getAComponentType
+GET     /part/{model}/{type}/{trademark}        Titus.getACompatibilityPart
+
+
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
 
-GET     /part/{model}/{type}/{trademark}          Titus.getACompatibilityPart
+
