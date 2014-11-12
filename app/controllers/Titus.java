@@ -235,6 +235,7 @@ public class Titus extends Controller {
             parts = Part.find("select p from Part p, ComponentType ty  where ty.description = ?", StringUtils.upperCase(searchedComponent.type.description)).fetch();
             //Analizo compatibilidad
             for (Part part : parts) {
+                System.out.println("parte analizada" + part);
                 if (CompatibilityEngine.getEngine().areThereCompatibility(part, searchedComponent)) {
                     salablePart = part;
                     break;
