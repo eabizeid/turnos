@@ -171,7 +171,7 @@ public class Titus extends Controller {
 
     public static void getACompatibilityPart(String model, String type, String trademark) {
        Part part = searchAPart(trademark, model, type);
-       System.out.println(part);
+       System.out.println("parte: " + part);
        renderJSON(part.toJson());
     }
 
