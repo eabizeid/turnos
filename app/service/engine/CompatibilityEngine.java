@@ -35,7 +35,8 @@ public class CompatibilityEngine {
             for (ComponentFeature componentFeature : component.compatibility){
                 System.out.println("Component Feature: " + componentFeature);
                 System.out.println("Component Feature: " + componentFeature.specification);
-                if (componentFeature.specification.description.equals(partFeature.specification.description)  && componentFeature.value == partFeature.value) {
+                if (componentFeature.specification.description.equals(partFeature.specification.description)  && componentFeature.value.equals(partFeature.value)) {
+                    System.out.println("SON IGUALES" );
                     equalsMap.add( Boolean.TRUE);
                     break;
                 }
