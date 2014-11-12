@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">&{'close'}</button>
+                    <button type="button" onclick="javascript:('input:checkbox').removeAttr('checked');" class="btn btn-default" data-dismiss="modal">&{'close'}</button>
                     <button type="submit" class="btn btn-primary">&{'save'}</button>
                 </div>
             </div><!-- /.modal-content -->
@@ -89,6 +89,10 @@
 </div>
 
 <script type="text/javascript">
+
+    $(document).ready( function(){
+        $('input:checkbox').removeAttr('checked');
+    })
 
     var getType = function() {
         if ($('input:checked').length > 1 ) {
