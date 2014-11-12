@@ -42,7 +42,7 @@ public class Part extends Model {
         }
         PartFeature pf =this.partFeature.get(this.partFeature.size()-1);
         buffer.append("{ \"specification\": \"" + pf.specification.description + "\", ");
-        buffer.append(" \"value\": \"" + pf.value.toString() + "\" },");
+        buffer.append(" \"value\": \"" + pf.value.toString() + "\" }");
         buffer.append("]");
 
         buffer.append("}");
