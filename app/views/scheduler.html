@@ -1,0 +1,42 @@
+#{extends 'main.html' /}
+#{set title:'Titus' /}
+
+#{form @Scheduler.search(), class:"form-horizontal"}
+<div id="teaser">
+    <div class="wrap">
+        <div id="image"></div>
+        <div class="box">
+            <h2><em title="Sharing and breakdowning devices">Organizador</em></h2>
+            <p>En esta sección podrá visualizar la organización de los consultorios, profesionales y  rangos horarios</p>
+        </div>
+    </div>
+</div>
+
+    #{if grillas != null && grillas.size()>0}
+    <div class="wrap container">
+        <h3>Clie<span class="red">ntes</span></h3>
+        <table id="results" class="table table-striped">
+            <thead>
+            <tr>
+                <th>E-mail</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                #{list items:clients, as:'client'}
+                <tr>
+                    <td>${client.mail}</td>
+                    <td><</td>
+
+                </tr>
+                #{/list}
+            </tbody>
+        </table>
+    </div>
+    #{/if}
+    #{else}
+    <div class="wrap container">
+        <p>No hay clientes cargados</p>
+    </div>
+    #{/else}
+#{/form}

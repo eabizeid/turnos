@@ -1,0 +1,40 @@
+#{extends 'main.html' /}
+#{set title:'CIMA' /}
+
+<div id="teaser">
+  <div class="wrap">
+    <div id="image"></div>
+    <div class="box">
+      <h2><em >Novedades</em></h2>
+      <p>En esta sección podrá visualizar Novedades</p>
+    </div>
+  </div>
+</div>
+
+#{if news != null && news.size()>0}
+<div class="wrap container">
+    <h3>Nove<span class="red">dades</span></h3>
+    <table id="results" class="table table-striped">
+        <thead>
+        <tr>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            #{list items:news, as:'n'}
+            <tr>
+                <td>${n.novedad}</td>
+
+            </tr>
+            #{/list}
+        </tbody>
+    </table>
+</div>
+#{/if}
+#{else}
+<div class="wrap container">
+    <p>No hay novedades cargados</p>
+</div>
+#{/else}
+
+

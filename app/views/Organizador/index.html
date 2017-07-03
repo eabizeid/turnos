@@ -1,0 +1,338 @@
+#{extends 'main.html' /}
+#{set title:'CIMA' /}
+
+
+<div id="teaser">
+  <div class="wrap">
+    <div class="box">
+      <h2><em >Organizador</em></h2>
+      <p>En esta sección podrá visualizar los turnos tomados y disponibles para los profesionales</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="search">
+    <h3>Bus<span class="red">car </span></h3>
+
+      <div class="form-group" >
+          <label for="profesional">Profesional</label>
+          <select class="form-control" id="profesional" name="profesional" >
+              <option></option>
+          #{list items:profesionales, as: 'c'}
+              <option value="${c.entityId}">${c.toString()}</option>
+          #{/list}}
+          </select>
+      </div>
+
+        <br /> <br />
+        <br />
+        <div class="btn-group">
+            <button id="searchButton" type="button" class="btn btn-large btn-primary"
+                    data-toggle="modal" data-target="#results" onclick="javascript:buscar()">Buscar</button>
+        </div>
+   </div>
+</div>
+<div id="calendarModal" class="modal" >
+    <div class="modal-dialog" style="min-width: 100%;min-height: 100%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title"></h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <div id="calendarc"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="addEvent" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title">Turnero</h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="pacientes">Profesional</label>
+                            <input type="text"  disabled  id="profesional" name="profesional">
+                            <input type="hidden" id="profesionalId" name="profesionalId" />
+                        </div>
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label>&nbsp;</label>
+                            <span id="profesionalesView" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="consult">Consultorio</label>
+                            <select class="form-control" id="consult" name="consult" >
+                            <option></option>
+                                #{list items:consultorios, as: 'c'}
+                                    <option value="${c.entityId}">${c.toString()}</option>
+                                #{/list}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="fecha">Fecha</label>
+                            <input type="text"    class="form-control" id="fecha" name="fecha">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="Desde">Hora Desde</label>
+                            <input type="text"    class="form-control" id="desde" name="desde">
+                        </div>
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="hora">Hora Hasta</label>
+                            <input type="text"   class="form-control" id="hasta" name="hasta" >
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-default"><a id="ok" target="_blank">Ok</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="AdminProfesionales" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title"></h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <div id="table"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="viewEvent" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title">Turnero</h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="profesionalView">Profesional</label>
+                            <input type="text"  disabled  id="profesionalView" name="profesionalView">
+                            <input type="hidden"  disabled  id="eventId" >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="fechaView">Fecha</label>
+                            <input type="text"    class="form-control" id="fechaView" name="fechaView">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="desdeView">Hora Desde</label>
+                            <input type="text"    class="form-control" id="desdeView" name="desdeView">
+                        </div>
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="hastaView">Hora Hasta</label>
+                            <input type="text"   class="form-control" id="hastaView" name="hastaView" >
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-default"><a id="borrar" target="_blank">Borrar</a></button>
+                <button class="btn btn-default"><a id="cancelar" target="_blank">Cancelar</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+<!--
+$(document).ready(function() {
+
+    $('.modal').on('hidden.bs.modal', function( event ) {
+        $(this).removeClass( 'fv-modal-stack' );
+        $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) - 1 );
+    });
+
+
+    $( '.modal' ).on( 'shown.bs.modal', function ( event ) {
+
+        // keep track of the number of open modals
+
+        if ( typeof( $('body').data( 'fv_open_modals' ) ) == 'undefined' )
+        {
+            $('body').data( 'fv_open_modals', 0 );
+        }
+
+
+        // if the z-index of this modal has been set, ignore.
+
+        if ( $(this).hasClass( 'fv-modal-stack' ) )
+        {
+            return;
+        }
+
+        $(this).addClass( 'fv-modal-stack' );
+
+        $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) + 1 );
+
+        $(this).css('z-index', 1040 + (10 * $('body').data( 'fv_open_modals' )));
+
+        $( '.modal-backdrop' ).not( '.fv-modal-stack' )
+                .css( 'z-index', 1039 + (10 * $('body').data( 'fv_open_modals' )));
+
+
+        $( '.modal-backdrop' ).not( 'fv-modal-stack' )
+                .addClass( 'fv-modal-stack' );
+
+    });
+
+
+    $("#profesionalesView").click( function() {
+                var action = #{jsAction @profesionales() /}
+                        $.post(action(), function (data) {
+                            $("#table").html(data);
+                            $("#AdminProfesionales").modal({show:true});
+
+                        })
+            }
+    )
+
+    $("#borrar").click(function() {
+        var breakdownPaciente = $("#pacienteView").val().split(", ")
+        var action = #{jsAction @deleteAppointment(':appointmentId') /}
+        $.post(action({appointmentId: breakdownPaciente[2]}), function(data) {
+            $('#calendar').fullCalendar('removeEvents', $("#eventId").val());
+            $("#viewEvent").modal('toggle');
+        })
+    })
+
+    $("#cancelar").click(function() {
+        var breakdownPaciente = $("#pacienteView").val().split(", ")
+        var action = #{jsAction @cancelAppointment(':appointmentId') /}
+        $.post(action({appointmentId: breakdownPaciente[2]}), function(data) {
+                    $('#calendar').fullCalendar('removeEvents', $("#eventId").val());
+                    $("#viewEvent").modal('toggle');
+         })
+    })
+
+    $("#ok").click(function() {
+
+                var action = #{jsAction @addTurnero(':professionalId', ':consultorioId', ':fecha', ':desde', ':hasta') /}
+                $.post(action({professionalId: $("#profesionalId").val(), consultorioId: $("#consult").val(),
+                            fecha: $("#fecha").val(),desde: $("#desde").val(), hasta: $("#hasta").val()}), function (data) {
+                            var fecha = data.desde.split("T")[0].split("-");
+                            var desde = data.desde.split("T")[1];
+                            var hasta = data.hasta.split("T")[1];
+                            var events = [
+                                {
+                                    title: data.consultorio.number+"/" +data.consultorio.establecimiento.nombre+" " +data.profesional.apellido + ", "  + data.profesional.nombre + ", " + data.id,
+                                    start: new Date(fecha[0], fecha[1]-1, fecha[2], desde.split(":")[0],desde.split(":")[1]),
+                                    end: new Date(fecha[0], fecha[1]-1, fecha[2], hasta.split(":")[0], hasta.split(":")[1]),
+                                    allDay: false
+                                }]
+                            $('#calendarc').fullCalendar('addEventSource',events);
+                            $('#calendarc').fullCalendar('renderEvents');
+                            $("#addEvent input:text").val('');
+                            $("#addEvent input:checkbox").prop("checked", false);
+                            $("#addEvent input:checkbox").val('');
+                            $("#addEvent").modal('toggle');
+                        })
+
+            }
+
+    )
+})
+
+var buscar = function() {
+
+    $("#calendarc").fullCalendar( 'destroy' )
+
+    $("#calendarModal").modal({show:true});
+
+    var profesionalId = $("#profesional").val()
+    var action = #{jsAction @organizadorConsultorio(':profesionalId') /}
+    $.post(action({profesionalId: profesionalId}), function (data) {
+        var calendar = $('#calendarc').fullCalendar({
+            header:
+            {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            lang: 'es',
+            defaultView: 'agendaWeek',
+            slotEventOverlap: true,
+            allDaySlot: true,
+            weekends: false,
+            minTime: "07:00:00",
+            maxTime: "21:00:00",
+            dayClick: function(date, allDay, jsEvent, view)
+            {
+
+                $("#fecha").val(moment(date).format("DD-MM-YYYY"))
+                $("#desde").val(moment(date).format("hh:00"))
+                $("#hasta").val(moment(date).format("hh:30"))
+
+                $("#addEvent").modal({show:true});
+                $('#consult option').filter(function(){
+                    return this.value === $("#consultorio").val()
+                }).prop('selected', true)
+
+            },
+
+            eventClick: function(calEvent, jsEvent, view) {
+
+                $("#profesionalView").val(calEvent.title.split(" - ")[1]);
+                $("#fechaView").val( moment(calEvent.start).format("DD-MM-YYYY"));
+                $("#desdeView").val( moment(calEvent.start).format("hh:mm"));
+                $("#hastaView").val( moment(calEvent.end).format("hh:mm"));
+                $("#eventId").val(calEvent._id);
+                $("#viewEvent").modal({show:true});
+            },
+            /*
+                editable: true allow user to edit events.
+            */
+            editable: false,
+
+
+            events: data
+
+        })
+
+    });
+}
+
+
+//-->
+</script>

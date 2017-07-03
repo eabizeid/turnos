@@ -1,0 +1,37 @@
+#{extends 'main.html' /}
+#{set title:'CIMA' /}
+
+<div id="teaser">
+  <div class="wrap">
+    <div id="image"></div>
+    <div class="box">
+      <h2><em >Organizador</em></h2>
+      <p>En esta sección podrá Generar el reporte para la fecha indicada</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="search">
+    <h3>Indique<span class="red"> la fecha </span></h3>
+      <form action="@{Scheduler.report}" >
+      <div class="form-group" >
+          <div class='input-group date'>
+              <input type='text' class="form-control" name="date" id='datepicker' />
+          </div>
+      </div>
+
+
+        <br /> <br />
+        <br />
+        <div class="btn-group">
+            <button id="searchButton" type="submit" class="btn btn-large btn-primary">Generar</button>
+        </div>
+      </form>
+   </div>
+</div>
+<script type="text/javascript">
+    $( function() {
+        $( "#datepicker" ).datepicker( {dateFormat: 'dd-mm-yy' });
+    } );
+</script>

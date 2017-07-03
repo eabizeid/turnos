@@ -1,58 +1,87 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
-#General
-description=Descripción
-new=Nuevo
-remove=Borrar
-edit=Editar
-save=Guardar
-cancel=Cancelar
-close=Cerrar
+#general
+Save=Guardar
+Close=Cerrar
+descripcion=Descripción
+nombre=Nombre
+apellido=Apellido
 
-trademark=Marca
-type=Tipo
-component=Componente
-model=Modelo
-partNumber=Nro de parte
-image=Imágen
-description=Descripción
-select=Seleccionar
-#Features
-feature=Característica
-features=Características
-features.no.results=No se han encontrado características
-features.page.description=Las características son las que nos permiten identificar de forma unívoca un componente o parte.
-feature.add=Agregar característica
+#Paciente
+pacientes=Pacientes
+paciente=Paciente
+nombres=Nombres
+tipoPago=Tipo de Pago
+mail=E-Mail
+nroAfiliado=Nro. de Afiliado
+obraSocial=Obra Social
+telefono=Teléfono
 
-#Component types
+#Obra Social
+ObrasSociales=Obras Sociales
+contacto=Contacto
 
-type=Tipo de componente
-types=Tipo de componentes
-types.no.results=No se han encontrado tipos de componentes
-types.page.description=Los tipos de componentes constituyen la base para un componente
-types.add=Agregar Tipo de componente
+#Profesionales
+Profesionals=Profesionales
+slotTime=Turnos cada
+mustChargeSign=Cobra seña
 
-#Component trademark
+#Especialidades
+especialidades=Especialides
+especialidad=Especialidades
 
-mark=Marca
-marks=Marcas
-marks.no.results=No se han encontrado marcas
-marks.page.description=Las marca representa al fabricante del componente
-marks.add=Agregar Marca
+#Establecimiento
+establecimiento=Establecimiento
+Direccion=Dirección
+interno=Interno
 
-#Part
 
-part=Parte
-parts=Partes
-parts.no.results=No se han encontrado partes
-parts.page.description=Una parte es el producto solicitado por un cliente.
-parts.add=Agregar parte
+#Consultorio
+number=Nro. de Consultorio
 
-#Components
+#CRUD
 
-component=Componente
-components=Componentes
-components.no.results=No se han encontrado componentes
-components.page.description=Un componente es el producto solicitado por un cliente
-parts.add=Agregar componente
+crud.title=Administración
+crud.home=Home
+crud.blank=Nuevo
+crud.index.title=Elegir
+crud.index.objectType=Entidad
+crud.index.action=
+crud.index.add=Agregar
+crud.add=Agregar &{%s}
+crud.list.title=&{%s}
+crud.list.size=%d &{%s}
+crud.list.totalSize=%d total
+crud.pagination.previous=« Anterior
+crud.pagination.next=Siguiente »
+crud.pagination.last=Último »»
+crud.pagination.first=«« Primero
+crud.show.title=Editar &{%s}
+crud.save=Guardar
+crud.saveAndContinue=Grabar y continuar editando
+crud.cancel=Cancelar
+crud.hasErrors=Corregir los errores
+crud.blank.title=Agregar &{%s}
+crud.saveAndAddAnother=Grabar y crear otro
+crud.delete=Borrar &{%s}
+crud.created=The &{%s} ha sido creado
+crud.saved=The &{%s} ha sido guardado
+crud.deleted=The &{%s} ha sido borrado
+crud.delete.error=No se puede borrar
+crud.search=Buscar
+crud.none=
+crud.selectValue=(Eliga un valor)
+
+crud.help.required=Required.
+crud.help.minlength=Min length is %d.
+crud.help.maxlength=Max length is %d.
+crud.help.email=Valid email address.
+crud.help.dateformat=&{%s} format.
+crud.help.numeric=Numeric.
+crud.help.min=Must be greater than %d.
+crud.help.future=In the future.
+crud.help.past=In the past.
+crud.help.after=After %s.
+crud.help.before=Before %s.
+crud.help.range=Between %d and %d

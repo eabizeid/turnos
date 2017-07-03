@@ -1,0 +1,229 @@
+#{if organizacion != null }
+<div>
+    <h3>Organización de <span class="red">Consultorios</span> de Posca, Magalí</h3>
+    <div class= "table-responsive">
+        <table id="results" class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>08:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("0800") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("LUNES").get("0800")} </td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("0800") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("MARTES").get("0800")}</td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("0800") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("MIERCOLES").get("0800")}</td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("0800") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("JUEVES").get("0800")}</td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("0800") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("VIERNES").get("0800")}</td>
+            </tr>
+            <tr>
+                <td>08:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("0830") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("LUNES").get("0830")}</td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("0830") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("MARTES").get("0830")}</td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("0830") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("MIERCOLES").get("0830")}</td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("0830") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("JUEVES").get("0830")}</td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("0830") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("VIERNES").get("0830")}</td>
+            </tr>
+            <tr>
+                <td>09:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("0900") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("LUNES").get("0900")}</td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("0900") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("MARTES").get("0900")}</td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("0900") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("MIERCOLES").get("0900")}</td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("0900") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("JUEVES").get("0900")}</td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("0900") }danger#{/if}#{else}active#{/else}">${organizacion.grilla.get("VIERNES").get("0900")}</td>
+            </tr>
+            <tr>
+                <td>09:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("0930") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("0930") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("0930") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("0930") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("0930") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>10:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1000") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1000") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1000") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1000") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1000") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>10:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1030") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1030") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1030") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1030") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1030") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>11:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1100") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1100") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1100") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1100") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1100") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>11:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1130") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1130") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1130") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1130") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1130") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>12:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1200") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1200") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1200") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1200") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1200") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>12:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1230") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1230") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1230") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1230") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1230") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>13:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1300") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1300") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1300") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1300") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1300") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>13:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1330") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1330") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1330") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1330") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1330") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>14:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1400") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1400") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1400") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1400") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1400") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>14:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1430") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1430") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1430") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1430") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1430") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>15:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1500") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1500") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1500") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1500") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1500") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>15:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1530") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1530") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1530") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1530") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1530") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>16:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1600") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1600") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1600") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1600") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1600") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>16:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1630") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1630") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1630") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1630") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1630") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>17:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1700") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1700") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1700") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1700") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1700") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>17:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1730") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1730") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1730") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1730") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1730") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>18:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1800") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1800") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1800") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1800") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1800") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>18:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1830") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1830") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1830") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1830") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1830") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>19:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1900") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1900") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1900") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1900") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1900") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>19:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("1930") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("1930") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("1930") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("1930") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("1930") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>20:00</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("2000") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("2000") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("2000") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("2000") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("2000") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            <tr>
+                <td>20:30</td>
+                <td class="#{if organizacion.grilla.get("LUNES").get("2030") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MARTES").get("2030") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("MIERCOLES").get("2030") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("JUEVES").get("2030") }danger#{/if}#{else}active#{/else}"></td>
+                <td class="#{if organizacion.grilla.get("VIERNES").get("2030") }danger#{/if}#{else}active#{/else}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+#{/if }

@@ -1,0 +1,177 @@
+<script type="text/javascript" charset="utf-8">
+
+        $(document).ready(function() {
+            $('#example').dataTable();
+
+            #{list items:dispoPorDia, as: 'd'}
+                #{if d.dia == 1}
+                    $("#c1").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $('[name="desdel${r_index}"]').val("${r.desde}");
+                        $('[name="hastal${r_index}"]').val("${r.hasta}");
+                    #{/list}
+                #{/if}
+                #{elseif d.dia == 2}
+                    $("#c2").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $('[name="desdem${r_index}"]').val("${r.desde}");
+                        $('[name="hastam${r_index}"]').val("${r.hasta}");
+                    #{/list}
+                #{/elseif}
+                #{elseif d.dia == 3}
+                    $("#c3").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $('[name="desdemi${r_index}"]').val("${r.desde}");
+                        $('[name="hastami${r_index}"]').val("${r.hasta}");
+                    #{/list}
+                #{/elseif}
+                #{elseif d.dia == 4}
+                    $("#c4").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $('[name="desdej${r_index}"]').val("${r.desde}");
+                        $('[name="hastaj${r_index}"]').val("${r.hasta}");
+                    #{/list}
+                #{/elseif}
+                #{elseif d.dia == 5}
+                    $("#c5").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $('[name="desdev${r_index}"]').val("${r.desde}");
+                        $('[name="hastav${r_index}"]').val("${r.hasta}");
+                    #{/list}
+                #{/elseif}
+            #{/list}
+
+
+        } );
+
+</script>
+
+#{extends 'main.html' /}
+#{set title:'CIMA' /}
+
+<div id="teaser">
+    <div class="wrap">
+        <div id="image"></div>
+        <div class="box">
+            <h2><em >Organizador</em></h2>
+            <p>En esta sección podrá visualizar los turnos tomados y disponibles para los profesionales</p>
+        </div>
+    </div>
+</div>
+
+<div class="wrap">
+
+        #{form @Organizador.saveNewDispo(), method:'POST', id:'creationForm' }
+            <div class="row">
+                <div class='col-sm-6'>
+                    <div class="form-group">
+                        <div class='input-group date'>
+                            <input type='text' class="form-control" name="anSpecificDay" id='datepicker' />
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $( function() {
+                        $( "#datepicker" ).datepicker();
+                    } );
+                </script>
+            </div>
+            <table id="example">
+                <thead>
+                    <th>Lunes</th>
+                    <th>Martes</th>
+                    <th>Miércoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" id="c1" name="lunes"/></td>
+                        <td><input type="checkbox" id="c2" name="martes"/></td>
+                        <td><input type="checkbox" id="c3" name="miercoles"/></td>
+                        <td><input type="checkbox" id="c4" name="jueves"/></td>
+                        <td><input type="checkbox" id="c5" name="viernes"/></td>
+                    </tr>
+                    <tr>
+                        <td id="rango_l1">
+                            <input class="chico" type="text" name="desdel1"/> - <input class="chico" type="text" name="hastal1"/>
+
+                        </td>
+
+                        <td id="rango_m1">
+                            <input class="chico" type="text" name="desdem1"/> - <input class="chico" type="text" name="hastam1"/>
+                        </td>
+                        <td id="rango_mi1">
+                            <input class="chico" type="text" name="desdemi1"/> - <input class="chico" type="text" name="hastami1"/>
+
+                        </td>
+                        <td id="rango_j1"><input class="chico" type="text" name="desdej1"/> - <input class="chico" type="text" name="hastaj1"/>
+
+                        </td>
+                        <td id="rango_v1"><input class="chico" type="text" name="desdev1"/> - <input class="chico" type="text" name="hastav1"/>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td id="rango_l2"><input class="chico" type="text" name="desdel2"/> - <input class="chico" type="text" name="hastal2"/>
+
+                        </td>
+                        <td id="rango_m2"><input class="chico" type="text" name="desdem2"/> - <input class="chico" type="text" name="hastam2"/>
+
+                        </td>
+                        <td id="rango_mi2"><input class="chico" type="text" name="desdemi2"/> - <input class="chico" type="text" name="hastami2"/>
+
+                        </td>
+                        <td id="rango_j2"><input class="chico" type="text" name="desdej2"/> - <input class="chico" type="text" name="hastaj2"/>
+
+                        </td>
+                        <td id="rango_v2"><input class="chico" type="text" name="desdev2"/> - <input class="chico" type="text" name="hastav2"/>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="rango_l3"><input class="chico" type="text" name="desdel3"/> - <input class="chico" type="text" name="hastal3"/>
+
+                        </td>
+                        <td id="rango_m3"><input class="chico" type="text" name="desdem3"/> - <input class="chico" type="text" name="hastam3"/>
+
+                        </td>
+                        <td id="rango_mi3"><input class="chico" type="text" name="desdemi3"/> - <input class="chico" type="text" name="hastami3"/>
+
+                        </td>
+                        <td id="rango_j3"><input class="chico" type="text" name="desdej3"/> - <input class="chico" type="text" name="hastaj3"/>
+
+                        </td>
+                        <td id="rango_v3"><input class="chico" type="text" name="desdev3"/> - <input class="chico" type="text" name="hastav3"/>
+                            <
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="rango_l4"><input class="chico" type="text" name="desdel4"/> - <input class="chico" type="text" name="hastal4"/>
+
+                        </td>
+                        <td id="rango_m4"><input class="chico" type="text" name="desdem4"/> - <input class="chico" type="text" name="hastam4"/>
+
+                        </td>
+                        <td id="rango_mi4"><input class="chico" type="text" name="desdemi4"/> - <input class="chico" type="text" name="hastami4"/>
+
+                        </td>
+                        <td id="rango_j4"><input class="chico" type="text" name="desdej4"/> - <input class="chico" type="text" name="hastaj4"/>
+
+                        </td>
+                        <td id="rango_v4"><input class="chico" type="text" name="desdev4"/> - <input class="chico" type="text" name="hastav4"/>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+
+            <input type="submit" id="newDispo" value="Grabar" />
+            <input type="hidden" name="professionalId" value="${professionalId}" />
+
+        #{/form}
+</div>

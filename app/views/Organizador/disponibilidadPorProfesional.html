@@ -1,0 +1,103 @@
+<script type="text/javascript" charset="utf-8">
+
+        $(document).ready(function() {
+            $('#example').dataTable();
+
+
+
+            #{list items:dispoPorDia, as: 'd'}
+                #{if d.dia == 1}
+                    $("#c1").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $("#rango_l${r_index}").append("${r.desde} - ${r.hasta} <br /> ${r.consultorio}");
+                    #{/list}
+                #{/if}
+                #{elseif d.dia == 2}
+                    $("#c2").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $("#rango_m${r_index}").append("${r.desde} - ${r.hasta} <br /> ${r.consultorio}");
+                    #{/list}
+                #{/elseif}
+                #{elseif d.dia == 3}
+                    $("#c3").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $("#rango_mi${r_index}").append("${r.desde} - ${r.hasta} <br /> ${r.consultorio}");
+                    #{/list}
+                #{/elseif}
+                #{elseif d.dia == 4}
+                    $("#c4").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $("#rango_j${r_index}").append("${r.desde} - ${r.hasta} <br /> ${r.consultorio}");
+                    #{/list}
+                #{/elseif}
+                #{elseif d.dia == 5}
+                    $("#c5").prop('checked', true);
+                    #{list items:d.rangos, as: 'r'}
+                        $("#rango_v${r_index}").append("${r.desde} - ${r.hasta} <br /> ${r.consultorio}");
+                    #{/list}
+                #{/elseif}
+            #{/list}
+
+
+        } );
+
+</script>
+
+
+<div class="row">
+
+    #{if specificDays != null && specificDays.size()>0}
+        <h3>Trabaja los días</h3>
+        #{list items:specificDays, as: 'day'}
+            <p>${day}</p>
+        #{/list}
+    #{/if}
+    <table id="example">
+        <thead>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td id="rango_l1"></td>
+                <td id="rango_m1"></td>
+                <td id="rango_mi1"></td>
+                <td id="rango_j1"></td>
+                <td id="rango_v1"></td>
+            </tr>
+
+            <tr>
+                <td id="rango_l2"></td>
+                <td id="rango_m2"></td>
+                <td id="rango_mi2"></td>
+                <td id="rango_j2"></td>
+                <td id="rango_v2"></td>
+            </tr>
+            <tr>
+                <td id="rango_l3"></td>
+                <td id="rango_m3"></td>
+                <td id="rango_mi3"></td>
+                <td id="rango_j3"></td>
+                <td id="rango_v3"></td>
+            </tr>
+            <tr>
+                <td id="rango_l4"></td>
+                <td id="rango_m4"></td>
+                <td id="rango_mi4"></td>
+                <td id="rango_j4"></td>
+                <td id="rango_v4"></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    #{form @Organizador.showNewDispo(), method:'POST', id:'creationForm' }
+        <input type="submit" id="newDispo" value="Nuevo" />
+        <input type="hidden" name="professionalId" value="${professionalId}" />
+    #{/form}
+
+</div>

@@ -1,0 +1,68 @@
+#{extends 'main.html' /}
+#{set title:'CIMA' /}
+      
+<div id="teaser">
+  <div class="wrap">
+    <div id="image"></div>
+    <div class="box">
+      <h2><em >Turnos</em></h2>
+      <p>En esta sección podrá visualizar los turnos tomados y disponibles para los profesionales</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="search">
+    <h3>Bus<span class="red">car </span></h3>
+
+      <div class="form-group" >
+          <label for="consultorio">Especialidad</label>
+          <select class="form-control" id="especialidad" name="especialidad" >
+          #{list items:especialidades, as: 'c'}
+              <option value="${c.entityId}">${c.toString()}</option>
+          #{/list}}
+          </select>
+      </div>
+      <div class="form-group" >
+          <label for="profesional">Profesional</label>
+            <select class="form-control" id="profesional" name="profesional" >
+                #{list items:profesionales, as: 'p'}
+                    <option value="${p.entityId}">${p.nombres} ${p.apellidos}</option>
+                #{/list}}
+            </select>
+       </div>
+
+        <br /> <br />
+        <br />
+        <div class="btn-group">
+            <button id="searchButton" type="button" class="btn btn-large btn-primary"
+                    data-toggle="modal" data-target="#results" onclick="javascript:buscar()">Buscar</button>
+        </div>
+   </div>
+</div>
+
+<div class="modal fade" id="results" tabindex="-3" role="dialog" aria-labelledby="results" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="resultList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+<!--
+    var buscar = function() {
+        var action = #{jsAction @appointmentTaken() /}
+        $.post(action(), function (data) {
+            $("#resultList").append(data);
+        });
+    }
+	
+//-->
+</script>

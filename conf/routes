@@ -6,9 +6,15 @@
 *       /                                       module:secure
 *       /admin         							module:crud
 # Home page
-GET     /                                       Titus.search
+GET     /                                       Scheduler.index
 
-GET     /about									Titus.about		
+GET     /about									Titus.about
+
+GET     /scheduler                              Scheduler.index
+GET     /consultorios                           Organizador.index
+GET     /organizarhorarios                      Organizador.dispoForProfesional
+GET     /report                                 Scheduler.showReport
+GET     /news                                   News.index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

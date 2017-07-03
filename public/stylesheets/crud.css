@@ -196,7 +196,8 @@ label {
 }
 
 .crudField select[multiple] {
-	max-height: 100px;
+	height: 300px;
+	width: 500px;
 }
 
 .crudField .crudHelp {

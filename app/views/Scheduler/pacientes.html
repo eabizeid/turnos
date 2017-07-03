@@ -1,0 +1,49 @@
+<script type="text/javascript" charset="utf-8">
+
+        $(document).ready(function() {
+            $('#example').dataTable();
+        } );
+    $("input:radio").click(function() {
+        var pacienteId = $('input:radio:checked').val();
+
+        $("#pacienteId").val(pacienteId)
+        var getPacienteAction = #{jsAction @paciente(':pacienteId') /}
+                $.post(getPacienteAction({pacienteId: pacienteId}), function (data) {
+                    $("#paciente").val(data.apellido + ", " + data.nombres)
+                    $('#AdminPacientes').modal('toggle');
+                })
+    })
+</script>
+
+
+    <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Apellido</th>
+                <th>Nombre</th>
+                <th>DNI</th>
+                <th>Nro de Afil.</th>
+                <th>Obra Social</th>
+                <th>T. Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            #{list items:pacientes, as: 'p'}
+                <tr>
+                    <td><input type="radio" value="${p.id}" /> </td>
+                    <td>${p.apellido}</td>
+                    <td>${p.nombres}</td>
+                    <td>${p.dni}</td>
+                    <td>${p.nroAfiliado}</td>
+                    #{if p.obraSocial}
+                    <td>${p.obraSocial.nombre}</td>
+                    #{/if}
+                    #{else }
+                    <td>Sin Obra Social</td>
+                    #{/else}
+                    <td>${p.tipoPago}</td>
+                </tr>
+            #{/list}
+        </tbody>
+    </table>

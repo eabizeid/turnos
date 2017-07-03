@@ -3,4 +3,14 @@
 require:
     - play
     - com.google.guava -> guava 15.0
-    - play -> morphia 1.2.12
+    - org.apache.poi -> poi [3.8,)
+    - org.antlr -> stringtemplate 4.0.2
+    - com.mercadopago -> sdk [0.0.1,)
+    - play -> crud
+    
+repositories:
+    - mercadopago:
+        type: iBiblio
+        root: "https://github.com/mercadopago/sdk-java/raw/master/snapshots/"
+        contains:
+           - com.mercadopago -> *

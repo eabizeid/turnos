@@ -1,0 +1,625 @@
+#{extends 'main.html' /}
+#{set title:'CIMA' /}
+
+<div id="teaser">
+  <div class="wrap">
+    <div class="box">
+      <h2><em >Organizador</em></h2>
+      <p>En esta sección podrá visualizar los turnos tomados y disponibles para los profesionales</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="search">
+    <h3>Bus<span class="red">car </span></h3>
+
+      <div class="form-group" >
+          <label for="especialidad">Especialidad</label>
+          <select class="form-control" id="especialidad" name="especialidad" >
+              <option></option>
+          #{list items:especialidades, as: 'c'}
+              <option value="${c.entityId}">${c.toString()}</option>
+          #{/list}}
+          </select>
+      </div>
+      <div class="form-group" >
+          <label for="profesional">Profesional</label>
+            <select class="form-control" id="profesional" name="profesional" >
+                <option></option>
+            </select>
+       </div>
+
+        <br /> <br />
+        <br />
+        <div class="btn-group">
+            <button id="searchButton" type="button" class="btn btn-large btn-primary"
+                    data-toggle="modal" data-target="#results" onclick="javascript:buscar()">Buscar</button>
+        </div>
+      <input type="hidden" name="mustChargeSign" value="" id="mustChargeSign" />
+   </div>
+</div>
+<div id="carouselModal" class="modal" >
+    <div class="modal-dialog" style="min-width: 100%;min-height: 100%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title"></h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <div id="myCarousel" class="carousel slide">
+                    <!-- Carousel items -->
+                    <div id="carousel-inner" class="carousel-inner">
+                    </div>
+                    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="calendarModal" class="modal" >
+    <div class="modal-dialog" style="min-width: 100%;min-height: 100%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title"></h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <div id="calendar"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="addEvent" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title">Turno</h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <div class="container-fluid" id="addEventContainer">
+
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="pacientes">Paciente</label>
+                            <input type="text"  disabled  id="paciente" name="paciente">
+                            <input type="hidden" id="pacienteId" name="pacienteId" />
+                        </div>
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label>&nbsp;</label>
+                            <span id="pacientesView" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="fecha">Fecha</label>
+                            <input type="text"    class="form-control" id="fecha" name="fecha" placeholder="dd/mm/yyyy">
+                        </div>
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="hora">Hora</label>
+                            <input type="text"   class="form-control" id="hora" name="hora" placeholder="hh:mm">
+                        </div>
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="hora">Sobreturno</label>
+                            <input type="checkbox"   class="form-control" id="st" name="st" >
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-default"><a id="ok" target="_blank">Ok</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="AdminPacientes" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title"></h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <div id="table"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="viewEvent" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title">Turno</h4>
+            </div>
+            <div id="modalBody" class="modal-body">
+                <div class="container-fluid" id="viewEventContainer">
+
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="pacienteView">Paciente</label>
+                            <input type="text"  disabled  id="pacienteView" name="paciente">
+                            <input type="hidden"  disabled  id="eventId" >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="fechaView">Fecha</label>
+                            <input type="text"    class="form-control" id="fechaView" name="fecha" placeholder="dd/mm/yyyy">
+                        </div>
+                        <div class="col-xs-6 col-md-4 form-group">
+                            <label for="horaView">Hora</label>
+                            <input type="text"   class="form-control" id="horaView" name="hora" placeholder="hh:mm">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-default"><a id="borrar" target="_blank">Borrar</a></button>
+                <button class="btn btn-default"><a id="cancelar" target="_blank">Cancelar</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+<!--
+$(document).ready(function() {
+
+    $('.modal').on('hidden.bs.modal', function( event ) {
+        $(this).removeClass( 'fv-modal-stack' );
+        $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) - 1 );
+    });
+
+    $('#addEvent').on('hidden.bs.modal', function( event ) {
+
+        $('this').removeData();
+        $("#advanceRow").remove()
+        $("#prestacionesRow").remove()
+    });
+    $('#viewEvent').on('hidden.bs.modal', function( event ) {
+
+        $('this').removeData();
+        $("#advanceRow").remove()
+        $("#prestacionesRow").remove()
+    });
+
+    $( '.modal' ).on( 'shown.bs.modal', function ( event ) {
+
+        // keep track of the number of open modals
+
+        if ( typeof( $('body').data( 'fv_open_modals' ) ) == 'undefined' )
+        {
+            $('body').data( 'fv_open_modals', 0 );
+        }
+
+
+        // if the z-index of this modal has been set, ignore.
+
+        if ( $(this).hasClass( 'fv-modal-stack' ) )
+        {
+            return;
+        }
+
+        $(this).addClass( 'fv-modal-stack' );
+
+        $('body').data( 'fv_open_modals', $('body').data( 'fv_open_modals' ) + 1 );
+
+        $(this).css('z-index', 1040 + (10 * $('body').data( 'fv_open_modals' )));
+
+        $( '.modal-backdrop' ).not( '.fv-modal-stack' )
+                .css( 'z-index', 1039 + (10 * $('body').data( 'fv_open_modals' )));
+
+
+        $( '.modal-backdrop' ).not( 'fv-modal-stack' )
+                .addClass( 'fv-modal-stack' );
+
+    });
+
+    $("#especialidad").change(function(){
+        var especialidadId = $("#especialidad").val()
+        var action = #{jsAction @profesionales(':especialidadId') /}
+                $.post(action({especialidadId: especialidadId}), function (data) {
+
+                    var sel = $("#profesional");
+                    sel.empty();
+                    sel.append("<option></option>");
+                    for (var i=0; i<data.length; i++) {
+                        sel.append('<option value="' + data[i].id + '">' + data[i].apellido + ', ' + data[i].nombre  + '</option>');
+                    }
+
+
+                })
+
+    })
+
+    $("#pacientesView").click( function() {
+                var action = #{jsAction @pacientes() /}
+                $.post(action(), function (data) {
+                    $("#table").html(data);
+                    $("#AdminPacientes").modal({show:true});
+
+                })
+            }
+    )
+
+    $("#borrar").click(function() {
+        var breakdownPaciente = $("#pacienteView").val().split(", ")
+        var action = #{jsAction @deleteAppointment(':appointmentId') /}
+        $.post(action({appointmentId: breakdownPaciente[2]}), function(data) {
+            $('#calendar').fullCalendar('removeEvents', $("#eventId").val());
+            $("#viewEvent").modal('toggle');
+        })
+    })
+
+    $("#cancelar").click(function() {
+        var breakdownPaciente = $("#pacienteView").val().split(", ")
+        var action = #{jsAction @cancelAppointment(':appointmentId') /}
+        $.post(action({appointmentId: breakdownPaciente[2]}), function(data) {
+                    $('#calendar').fullCalendar('removeEvents', $("#eventId").val());
+                    $("#viewEvent").modal('toggle');
+         })
+    })
+
+    $("#ok").click(function() {
+                var advanceValue = ""
+                if ($("#advanceRow")) {
+                    advanceValue = $("#advance").val()
+                }
+
+                var prestaciones = $( "#prestacionesRow input[type=checkbox]:checked" ).map(function() {
+                    return this.value;
+                }).get().join();
+                var action = #{jsAction @addAppointment(':professionalId', ':especialidadId', ':paciente', ':fecha', ':hora', ':st', ':advance', ':prestaciones') /}
+                $.post(action({professionalId: $("#profesional").val(), especialidadId: $("#especialidad").val(), paciente: $("#pacienteId").val(),
+                            fecha: $("#fecha").val(),hora: $("#hora").val(),st: $("#st").is(':checked'), advance: advanceValue, prestaciones: prestaciones}), function (data) {
+                            var fecha = data.cita.fecha.split("-");
+                            var hora = data.cita.hora.split(":");
+                            var events = [
+                                {
+                                    title: data.paciente.apellido + ", "  + data.paciente.nombres + ", " + data.id,
+                                    start: new Date(fecha[2], fecha[1]-1, fecha[0], hora[0], hora[1]),
+                                    end: new Date(fecha[2], fecha[1]-1, fecha[0], hora[0], hora[1]),
+                                    allDay: false,
+                                    borderColor:data.border,
+                                    color: data.color,
+                                    description: data.advance,
+                                }]
+                            $('#calendar').fullCalendar('addEventSource',events);
+                            $('#calendar').fullCalendar('renderEvents');
+                            $("#addEvent input:text").val('');
+                            $("#addEvent input:checkbox").prop("checked", false);
+                            $("#addEvent input:checkbox").val('');
+                            $("#addEvent").modal('toggle');
+                        })
+
+            }
+
+    )
+
+
+
+
+
+});
+var buscar = function() {
+
+    $("#calendar").fullCalendar( 'destroy' )
+
+    profesionalId = $("#profesional").val()
+    especialidadId = $("#especialidad").val()
+
+    var d = new Date();
+    var month = d.getMonth() +1;
+    var availableDays = #{jsAction @availableDays(':professionalId', ':month') /}
+            $.post(availableDays({professionalId: profesionalId, month: month}), function (data1) {
+                var action = #{jsAction @organizador(':professionalId', ':especialidadId') /}
+                $.post(action({
+                    professionalId: profesionalId,
+                    especialidadId: especialidadId
+                }), function (data) {
+                        if (data1.withAnSpecificDays) {
+
+
+                            var now = new Date();
+                            var dd = now.getDate();
+                            var mm = now.getMonth()+1; //January is 0!
+                            var yyyy = now.getFullYear();
+                            if(dd<10) {
+                                dd='0'+dd
+                            }
+
+                            if(mm<10) {
+                                mm='0'+mm
+                            }
+
+                            var today = yyyy+ "" + mm + "" +dd;
+                            var days  = data1.anSpecificDays;
+                            if (days && days.length > 0) {
+
+                                var contador = 0;
+                                while ( (contador < days.length )&& (days[contador].split("/")[2] + "" + days[contador].split("/")[1] + "" + days[contador].split("/")[0] < today )) {
+                                    contador = contador + 1;
+                                }
+
+                                var operativeDays = null
+                                    if (contador == days.length)
+                                        operativeDays = days.slice(contador-1)
+                                    else
+                                        operativeDays = days.slice(contador)
+
+
+                                $("#calendarModal").modal({show: true});
+
+
+                                $("#mustChargeSign").val(data.profesional.mustChargeSign)
+                                var calendar = $('#calendar').fullCalendar({
+                                    header: {
+                                        left: 'prev,next today',
+                                        center: 'title',
+                                        right: 'month,agendaWeek,agendaDay'
+                                    },
+                                    lang: 'es',
+                                    defaultView: 'agendaDay',
+                                    slotEventOverlap: true,
+                                    slotDuration: '00:' + data.profesional.slotTime + ':00',
+                                    defaultTimedEventDuration: '00:' + data.profesional.slotTime + ':00',
+                                    forceEventDuration: true,
+                                    allDaySlot: false,
+                                    weekends: false,
+                                    minTime: "08:00:00",
+
+                                    maxTime: "21:00:00",
+
+                                    businessHours: data1.businessHours,
+
+                                    dayClick: function (date, allDay, jsEvent, view) {
+
+                                        $("#fecha").val(moment(date).format("DD-MM-YYYY"))
+                                        $("#hora").val(moment(date).format("HH:mm"))
+                                        $("#addEvent").modal({show: true});
+
+                                        if ($("#mustChargeSign").val() == 'true') {
+
+                                            var newTextBoxDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "advanceRow");
+
+                                            newTextBoxDiv.after().html('<label>Seña</label><input type="text" class="form-control"  name="advance" id="advance" >');
+
+                                            var row = $(document.createElement('div')).attr("class", 'row');
+
+                                            row.append(newTextBoxDiv)
+
+                                            row.appendTo("#addEventContainer");
+                                        }
+                                        var prestacionesDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "prestacionesRow");
+                                        if (data.especialidad.prestaciones) {
+                                            for (i = 0; i < data.especialidad.prestaciones.length; i++) {
+                                                var prestacion = data.especialidad.prestaciones[i]
+                                                prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" id="prestacion[' + i + ']" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
+                                            }
+
+                                        }
+                                        var row = $(document.createElement('div')).attr("class", 'row');
+
+                                        row.append(prestacionesDiv)
+
+                                        row.appendTo("#addEventContainer");
+                                    },
+
+                                    eventClick: function (calEvent, jsEvent, view) {
+
+                                        $("#pacienteView").val(calEvent.title)
+                                        $("#fechaView").val(moment(calEvent.start).format("DD-MM-YYYY"))
+                                        $("#horaView").val(moment(calEvent.start).format("hh:mm"))
+                                        $("#eventId").val(calEvent._id)
+                                        if ($("#mustChargeSign").val() == 'true') {
+                                            var newTextBoxDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "advanceRow");
+
+                                            newTextBoxDiv.after().html('<label>Seña</label><input type="text" disabled class="form-control"  name="advance" id="advance"  value="' +
+                                                    calEvent.description + '">');
+
+                                            var row = $(document.createElement('div')).attr("class", 'row');
+
+                                            row.append(newTextBoxDiv)
+
+                                            row.appendTo("#viewEventContainer");
+                                        }
+                                        var prestacionesDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "prestacionesRow");
+                                        if (data.especialidad.prestaciones) {
+                                            for (i = 0; i < data.especialidad.prestaciones; i++) {
+                                                var prestacion = data.especialidad.prestaciones[i]
+                                                prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
+                                            }
+
+                                        }
+                                        var row = $(document.createElement('div')).attr("class", 'row');
+
+                                        row.append(prestacionesDiv)
+
+                                        row.appendTo("#viewEventContainer");
+                                        $("#viewEvent").modal({show: true});
+                                    },
+                                    /*
+                                        editable: true allow user to edit events.
+                                    */
+                                    editable: false,
+
+
+                                    events: data.events
+
+                                })
+                                calendar.fullCalendar( 'gotoDate', moment(operativeDays[0], "DD-MM-YYYY" ))
+
+                            }
+
+                            var dayIterator =0;
+                            $('.fc-next-button').click(function(){
+                                if ( ( dayIterator + 1) < operativeDays.length ) {
+                                    dayIterator = dayIterator + 1
+                                    calendar.fullCalendar('gotoDate', moment(operativeDays[dayIterator], "DD-MM-YYYY"))
+                                } else {
+                                    calendar.fullCalendar('gotoDate', moment(operativeDays[dayIterator], "DD-MM-YYYY"))
+                                    alert("No Hay otro día habilitado. Revisar la organizacion de Horarios")
+                                }
+
+                            });
+
+                            $('.fc-prev-button').click(function(){
+                                if ( ( dayIterator - 1) >  0 ) {
+                                    dayIterator = dayIterator - 1
+                                    calendar.fullCalendar('gotoDate', moment(operativeDays[dayIterator], "DD-MM-YYYY"))
+                                } else {
+                                    calendar.fullCalendar('gotoDate', moment(operativeDays[dayIterator], "DD-MM-YYYY"))
+                                    alert("No Hay otro día habilitado. Revisar la organizacion de Horarios")
+                                }
+
+                            });
+
+                        } else {
+
+                            console.log(data1);
+                            $("#calendarModal").modal({show: true});
+
+
+                            $("#mustChargeSign").val(data.profesional.mustChargeSign)
+                            var calendar = $('#calendar').fullCalendar({
+                                header: {
+                                    left: 'prev,next today',
+                                    center: 'title',
+                                    right: 'month,agendaWeek,agendaDay'
+                                },
+                                lang: 'es',
+                                defaultView: 'agendaWeek',
+                                slotEventOverlap: true,
+                                slotDuration: '00:' + data.profesional.slotTime + ':00',
+                                defaultTimedEventDuration: '00:' + data.profesional.slotTime + ':00',
+                                forceEventDuration: true,
+                                allDaySlot: false,
+                                weekends: false,
+                                minTime: "08:00:00",
+
+                                maxTime: "21:00:00",
+
+                                businessHours: data1.businessHours,
+
+                                dayClick: function (date, allDay, jsEvent, view) {
+
+
+                                    $("#fecha").val(moment(date).format("DD-MM-YYYY"))
+                                    $("#hora").val(moment(date).format("HH:mm"))
+                                    var dow = moment(date).format("d");
+                                    var m = moment(date).format("M");
+                                    var isBusinessHour = #{jsAction @isBusinessHour(':hora', ':month', ':dow', ':professionalId') /}
+                                            $.post(isBusinessHour({hora: moment(date).format("HH:mm"),month: m, dow: dow, professionalId: profesionalId}), function (response) {
+                                                if (response == 'true' ) {
+                                                    $("#addEvent").modal({show: true});
+
+                                                    if ($("#mustChargeSign").val() == 'true') {
+
+                                                        var newTextBoxDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "advanceRow");
+
+                                                        newTextBoxDiv.after().html('<label>Seña</label><input type="text" class="form-control"  name="advance" id="advance" >');
+
+                                                        var row = $(document.createElement('div')).attr("class", 'row');
+
+                                                        row.append(newTextBoxDiv)
+
+                                                        row.appendTo("#addEventContainer");
+                                                    }
+                                                    var prestacionesDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "prestacionesRow");
+                                                    if (data.especialidad.prestaciones) {
+                                                        for (i = 0; i < data.especialidad.prestaciones.length; i++) {
+                                                            var prestacion = data.especialidad.prestaciones[i]
+                                                            prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" id="prestacion[' + i + ']" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
+                                                        }
+
+                                                    }
+                                                    var row = $(document.createElement('div')).attr("class", 'row');
+
+                                                    row.append(prestacionesDiv)
+
+                                                    row.appendTo("#addEventContainer");
+                                                }else {
+                                                    alert("No es un horario habilitado para  dar turnos.");
+                                                }
+                                            })
+
+                                },
+
+                                eventClick: function (calEvent, jsEvent, view) {
+
+                                    $("#pacienteView").val(calEvent.title)
+                                    $("#fechaView").val(moment(calEvent.start).format("DD-MM-YYYY"))
+                                    $("#horaView").val(moment(calEvent.start).format("hh:mm"))
+                                    $("#eventId").val(calEvent._id)
+                                    if ($("#mustChargeSign").val() == 'true') {
+                                        var newTextBoxDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "advanceRow");
+
+                                        newTextBoxDiv.after().html('<label>Seña</label><input type="text" disabled class="form-control"  name="advance" id="advance"  value="' +
+                                                calEvent.description + '">');
+
+                                        var row = $(document.createElement('div')).attr("class", 'row');
+
+                                        row.append(newTextBoxDiv)
+
+                                        row.appendTo("#viewEventContainer");
+                                    }
+                                    var prestacionesDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "prestacionesRow");
+                                    if (data.especialidad.prestaciones) {
+                                        for (i = 0; i < data.especialidad.prestaciones; i++) {
+                                            var prestacion = data.especialidad.prestaciones[i]
+                                            prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
+                                        }
+
+                                    }
+                                    var row = $(document.createElement('div')).attr("class", 'row');
+
+                                    row.append(prestacionesDiv)
+
+                                    row.appendTo("#viewEventContainer");
+                                    $("#viewEvent").modal({show: true});
+                                },
+                                /*
+                                    editable: true allow user to edit events.
+                                */
+                                editable: false,
+
+
+                                events: data.events
+
+                            })
+                        }
+                    });
+                });
+
+
+}
+
+
+//-->
+</script>
