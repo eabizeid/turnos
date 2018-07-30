@@ -15,18 +15,12 @@
     <h3>Bus<span class="red">car </span></h3>
 
       <div class="form-group" >
-          <label for="especialidad">Especialidad</label>
-          <select class="form-control" id="especialidad" name="especialidad" >
-              <option></option>
-          #{list items:especialidades, as: 'c'}
-              <option value="${c.entityId}">${c.toString()}</option>
-          #{/list}}
-          </select>
-      </div>
-      <div class="form-group" >
           <label for="profesional">Profesional</label>
             <select class="form-control" id="profesional" name="profesional" >
-                <option></option>
+                 <option></option>
+          #{list items:profesionales, as: 'c'}
+              <option value="${c.entityId}">${c.toString()}</option>
+          #{/list}}
             </select>
        </div>
 
@@ -116,11 +110,20 @@
                             <label for="hora">Sobreturno</label>
                             <input type="checkbox"   class="form-control" id="st" name="st" >
                         </div>
+                        
+                    </div>
+                    <div class="row" id="notaOS" style="display:none">
+                        <div class="col-xs-12 col-md-8 form-group">
+                        	<p><strong>El Paciente no tiene una obra social con la que el profesional trabaje, puede agregar una Nota.</strong></p>
+                            <label for="fecha">Nota</label>
+                            <input type="text"    class="form-control" id="notaOs" name="notaOS" />
+                        </div>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
+            	<input type="text" name="togglePaletteOnly" id="togglePaletteOnly">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button class="btn btn-default"><a id="ok" target="_blank">Ok</a></button>
             </div>
@@ -190,6 +193,28 @@
 
 <!--
 $(document).ready(function() {
+	
+	$("#togglePaletteOnly").spectrum({
+	    showPaletteOnly: true,
+	    togglePaletteOnly: true,
+	    togglePaletteMoreText: 'mas',
+	    togglePaletteLessText: 'menos',
+	    color: 'rgb(246, 178, 107)',
+	    palette: [
+	        ["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+	        ["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+	        ["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
+	        ["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
+	        ["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
+	        ["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
+	        ["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
+	        ["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
+	    ],
+	    
+	           
+	});
+	     
+	
 
     $('.modal').on('hidden.bs.modal', function( event ) {
         $(this).removeClass( 'fv-modal-stack' );
@@ -200,12 +225,14 @@ $(document).ready(function() {
 
         $('this').removeData();
         $("#advanceRow").remove()
+        $("#plazoadvanceRow").remove();
         $("#prestacionesRow").remove()
     });
     $('#viewEvent').on('hidden.bs.modal', function( event ) {
 
         $('this').removeData();
         $("#advanceRow").remove()
+        $("#plazoadvanceRow").remove();
         $("#prestacionesRow").remove()
     });
 
@@ -241,22 +268,6 @@ $(document).ready(function() {
 
     });
 
-    $("#especialidad").change(function(){
-        var especialidadId = $("#especialidad").val()
-        var action = #{jsAction @profesionales(':especialidadId') /}
-                $.post(action({especialidadId: especialidadId}), function (data) {
-
-                    var sel = $("#profesional");
-                    sel.empty();
-                    sel.append("<option></option>");
-                    for (var i=0; i<data.length; i++) {
-                        sel.append('<option value="' + data[i].id + '">' + data[i].apellido + ', ' + data[i].nombre  + '</option>');
-                    }
-
-
-                })
-
-    })
 
     $("#pacientesView").click( function() {
                 var action = #{jsAction @pacientes() /}
@@ -269,18 +280,18 @@ $(document).ready(function() {
     )
 
     $("#borrar").click(function() {
-        var breakdownPaciente = $("#pacienteView").val().split(", ")
+        var breakdownPaciente = $("#pacienteView").val().split(", ")[2].replace(/\s+/, "").split("-")
         var action = #{jsAction @deleteAppointment(':appointmentId') /}
-        $.post(action({appointmentId: breakdownPaciente[2]}), function(data) {
+        $.post(action({appointmentId: breakdownPaciente[0]}), function(data) {
             $('#calendar').fullCalendar('removeEvents', $("#eventId").val());
             $("#viewEvent").modal('toggle');
         })
     })
 
     $("#cancelar").click(function() {
-        var breakdownPaciente = $("#pacienteView").val().split(", ")
+        var breakdownPaciente = $("#pacienteView").val().split(", ")[2].replace(/\s+/, "").split("-")
         var action = #{jsAction @cancelAppointment(':appointmentId') /}
-        $.post(action({appointmentId: breakdownPaciente[2]}), function(data) {
+        $.post(action({appointmentId: breakdownPaciente[0]}), function(data) {
                     $('#calendar').fullCalendar('removeEvents', $("#eventId").val());
                     $("#viewEvent").modal('toggle');
          })
@@ -288,30 +299,38 @@ $(document).ready(function() {
 
     $("#ok").click(function() {
                 var advanceValue = ""
+                var plazoValue	 = ""
                 if ($("#advanceRow")) {
                     advanceValue = $("#advance").val()
+                    plazoValue = $("#plazo").val()
                 }
 
                 var prestaciones = $( "#prestacionesRow input[type=checkbox]:checked" ).map(function() {
                     return this.value;
                 }).get().join();
-                var action = #{jsAction @addAppointment(':professionalId', ':especialidadId', ':paciente', ':fecha', ':hora', ':st', ':advance', ':prestaciones') /}
+                var notaOS = $("#notaOS").val();
+                var color = $("#togglePaletteOnly").val();
+                var action = #{jsAction @addAppointment(':professionalId', ':especialidadId', ':paciente', ':fecha', ':hora', ':st', ':advance', ':plazo', ':prestaciones', ':notaOS', ':color') /}
                 $.post(action({professionalId: $("#profesional").val(), especialidadId: $("#especialidad").val(), paciente: $("#pacienteId").val(),
-                            fecha: $("#fecha").val(),hora: $("#hora").val(),st: $("#st").is(':checked'), advance: advanceValue, prestaciones: prestaciones}), function (data) {
+                            fecha: $("#fecha").val(),hora: $("#hora").val(),st: $("#st").is(':checked'), advance: advanceValue,plazo: plazoValue, prestaciones: prestaciones, notaOS: notaOS, color: color}), function (data) {
                             var fecha = data.cita.fecha.split("-");
                             var hora = data.cita.hora.split(":");
+                            var prestacionesTitulo = (data.prestaciones != null) ? data.prestaciones : '';
+                            var particularTitulo = (data.particular == true) ? 'PART' : 'NO PART';
+                            var obraSocialTitulo = (data.paciente.obraSocial != null) ? data.paciente.obraSocial.nombre: 'SIN OS';
+                            var plazoTitulo = "plazo: " + data.plazoSeña;
                             var events = [
                                 {
-                                    title: data.paciente.apellido + ", "  + data.paciente.nombres + ", " + data.id,
+                                    title: data.paciente.apellido + ", "  + data.paciente.nombres + ", " + data.id + " - " + prestacionesTitulo + " - " + particularTitulo + " - " + obraSocialTitulo + " - " + plazoTitulo,
                                     start: new Date(fecha[2], fecha[1]-1, fecha[0], hora[0], hora[1]),
                                     end: new Date(fecha[2], fecha[1]-1, fecha[0], hora[0], hora[1]),
                                     allDay: false,
-                                    borderColor:data.border,
+                                    borderColor:data.border,                                  
                                     color: data.color,
                                     description: data.advance,
-                                }]
-                            $('#calendar').fullCalendar('addEventSource',events);
-                            $('#calendar').fullCalendar('renderEvents');
+                                    plazo: data.plazoSeña
+                                }]                          
+                            $('#calendar').fullCalendar('renderEvents', events);
                             $("#addEvent input:text").val('');
                             $("#addEvent input:checkbox").prop("checked", false);
                             $("#addEvent input:checkbox").val('');
@@ -332,16 +351,14 @@ var buscar = function() {
     $("#calendar").fullCalendar( 'destroy' )
 
     profesionalId = $("#profesional").val()
-    especialidadId = $("#especialidad").val()
 
     var d = new Date();
     var month = d.getMonth() +1;
     var availableDays = #{jsAction @availableDays(':professionalId', ':month') /}
             $.post(availableDays({professionalId: profesionalId, month: month}), function (data1) {
-                var action = #{jsAction @organizador(':professionalId', ':especialidadId') /}
+                var action = #{jsAction @organizador(':professionalId') /}
                 $.post(action({
-                    professionalId: profesionalId,
-                    especialidadId: especialidadId
+                    professionalId: profesionalId
                 }), function (data) {
                         if (data1.withAnSpecificDays) {
 
@@ -388,12 +405,13 @@ var buscar = function() {
                                     defaultView: 'agendaDay',
                                     slotEventOverlap: true,
                                     slotDuration: '00:' + data.profesional.slotTime + ':00',
+                                    slotLabelInterval:  '00:' + data.profesional.slotTime + ':00',
                                     defaultTimedEventDuration: '00:' + data.profesional.slotTime + ':00',
                                     forceEventDuration: true,
                                     allDaySlot: false,
                                     weekends: false,
                                     minTime: "08:00:00",
-
+                                    contentHeight:1000,     //specific height instead of auto
                                     maxTime: "21:00:00",
 
                                     businessHours: data1.businessHours,
@@ -408,11 +426,15 @@ var buscar = function() {
 
                                             var newTextBoxDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "advanceRow");
 
-                                            newTextBoxDiv.after().html('<label>Seña</label><input type="text" class="form-control"  name="advance" id="advance" >');
+                                            newTextBoxDiv.after().html('<label>Seña</label><input type="text" class="form-control"  name="advance" id="advance" > ');
+
+                                            var plazoTextBoxDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "plazoadvanceRow");
+                                            plazoTextBoxDiv.after().html('<label>Plazo</label><input type="text" class="form-control"  name="plazo" id="plazo" >');
 
                                             var row = $(document.createElement('div')).attr("class", 'row');
 
                                             row.append(newTextBoxDiv)
+                                            row.append(plazoTextBoxDiv)
 
                                             row.appendTo("#addEventContainer");
                                         }
@@ -443,19 +465,27 @@ var buscar = function() {
                                             newTextBoxDiv.after().html('<label>Seña</label><input type="text" disabled class="form-control"  name="advance" id="advance"  value="' +
                                                     calEvent.description + '">');
 
+                                            var plazoTextBoxDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "plazoadvanceRow");
+                                            plazoTextBoxDiv.after().html('<label>Plazo</label><input type="text" class="form-control"  name="plazo" id="plazo" >');
+
                                             var row = $(document.createElement('div')).attr("class", 'row');
 
                                             row.append(newTextBoxDiv)
+                                            row.append(plazoTextBoxDiv)
 
                                             row.appendTo("#viewEventContainer");
                                         }
                                         var prestacionesDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "prestacionesRow");
-                                        if (data.especialidad.prestaciones) {
-                                            for (i = 0; i < data.especialidad.prestaciones; i++) {
-                                                var prestacion = data.especialidad.prestaciones[i]
-                                                prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
-                                            }
+                                        for (i = 0; i < data.profesional.especialidades; i++) {
+                                        	var especialidad = data.profesional.especialidades[i];
+                    	                    if (especialidad.prestaciones) {
+                    	                    
+                	                            for (i = 0; i < data.especialidad.prestaciones; i++) {
+            	                                    var prestacion = especialidad.prestaciones[i]
+        	                                        prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
+    	                                        }
 
+	                                        }
                                         }
                                         var row = $(document.createElement('div')).attr("class", 'row');
 
@@ -470,7 +500,8 @@ var buscar = function() {
                                     editable: false,
 
 
-                                    events: data.events
+                                    events: data.events,
+                                    textColor: 'black' // an option!
 
                                 })
                                 calendar.fullCalendar( 'gotoDate', moment(operativeDays[0], "DD-MM-YYYY" ))
@@ -490,7 +521,7 @@ var buscar = function() {
                             });
 
                             $('.fc-prev-button').click(function(){
-                                if ( ( dayIterator - 1) >  0 ) {
+                                if ( ( dayIterator - 1) >= 0 ) {
                                     dayIterator = dayIterator - 1
                                     calendar.fullCalendar('gotoDate', moment(operativeDays[dayIterator], "DD-MM-YYYY"))
                                 } else {
@@ -502,27 +533,26 @@ var buscar = function() {
 
                         } else {
 
-                            console.log(data1);
                             $("#calendarModal").modal({show: true});
 
-
                             $("#mustChargeSign").val(data.profesional.mustChargeSign)
-                            var calendar = $('#calendar').fullCalendar({
+                            var calendar = $('#calendar').fullCalendar({	
                                 header: {
                                     left: 'prev,next today',
                                     center: 'title',
                                     right: 'month,agendaWeek,agendaDay'
                                 },
                                 lang: 'es',
-                                defaultView: 'agendaWeek',
+                                defaultView: 'agendaDay',
                                 slotEventOverlap: true,
                                 slotDuration: '00:' + data.profesional.slotTime + ':00',
                                 defaultTimedEventDuration: '00:' + data.profesional.slotTime + ':00',
+                                slotLabelInterval:  '00:' + data.profesional.slotTime + ':00',
                                 forceEventDuration: true,
                                 allDaySlot: false,
                                 weekends: false,
                                 minTime: "08:00:00",
-
+                                contentHeight:800,  
                                 maxTime: "21:00:00",
 
                                 businessHours: data1.businessHours,
@@ -545,25 +575,43 @@ var buscar = function() {
 
                                                         newTextBoxDiv.after().html('<label>Seña</label><input type="text" class="form-control"  name="advance" id="advance" >');
 
+                                                        var plazoTextBoxDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "plazoadvanceRow");
+                                                        plazoTextBoxDiv.after().html('<label>Plazo</label><input type="text" class="form-control"  name="plazo" id="plazo" >');
+
                                                         var row = $(document.createElement('div')).attr("class", 'row');
 
                                                         row.append(newTextBoxDiv)
-
+                                                        row.append(plazoTextBoxDiv)
+														
+                                                 
                                                         row.appendTo("#addEventContainer");
+                                                        $( "#plazo" ).datepicker({
+                                                        	 dateFormat: 'dd/mm/yy',
+                                                        	 //comment the beforeShow handler if you want to see the ugly overlay
+                                                            beforeShow: function() {
+                                                                setTimeout(function(){
+                                                                    $('.ui-datepicker').css('z-index', 99999999999999);
+                                                                }, 0);
+                                                            }
+                                                        });
                                                     }
                                                     var prestacionesDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "prestacionesRow");
-                                                    if (data.especialidad.prestaciones) {
-                                                        for (i = 0; i < data.especialidad.prestaciones.length; i++) {
-                                                            var prestacion = data.especialidad.prestaciones[i]
-                                                            prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" id="prestacion[' + i + ']" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
-                                                        }
+                                                    for (i = 0; i < data.profesional.especialidades.length; i++) {
+                                                    	var especialidad = data.profesional.especialidades[i];
+                                	                    if (especialidad.prestaciones) {
+                                	                    
+                            	                            for (i = 0; i < especialidad.prestaciones.length; i++) {
+                        	                                    var prestacion = especialidad.prestaciones[i]
+                    	                                        prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
+                	                                        }
 
+            	                                        }
                                                     }
-                                                    var row = $(document.createElement('div')).attr("class", 'row');
+                                                    var rowPrestaciones = $(document.createElement('div')).attr("class", 'row');
 
-                                                    row.append(prestacionesDiv)
+                                                    rowPrestaciones.append(prestacionesDiv)
 
-                                                    row.appendTo("#addEventContainer");
+                                                    rowPrestaciones.appendTo("#addEventContainer");
                                                 }else {
                                                     alert("No es un horario habilitado para  dar turnos.");
                                                 }
@@ -583,19 +631,28 @@ var buscar = function() {
                                         newTextBoxDiv.after().html('<label>Seña</label><input type="text" disabled class="form-control"  name="advance" id="advance"  value="' +
                                                 calEvent.description + '">');
 
+                                        var plazoTextBoxDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "plazoadvanceRow");
+                                        plazoTextBoxDiv.after().html('<label>Plazo</label><input type="text" class="form-control"  name="plazo" id="plazo" value="' +
+                                                calEvent.plazo + '">');
+
                                         var row = $(document.createElement('div')).attr("class", 'row');
 
                                         row.append(newTextBoxDiv)
+                                        row.append(plazoTextBoxDiv)
 
                                         row.appendTo("#viewEventContainer");
                                     }
                                     var prestacionesDiv = $(document.createElement('div')).attr("class", 'col-xs-6 col-md-4 form-group').attr("id", "prestacionesRow");
-                                    if (data.especialidad.prestaciones) {
-                                        for (i = 0; i < data.especialidad.prestaciones; i++) {
-                                            var prestacion = data.especialidad.prestaciones[i]
-                                            prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
-                                        }
+                                    for (i = 0; i < data.profesional.especialidades; i++) {
+                                    	var especialidad = data.profesional.especialidades[i];
+                	                    if (especialidad.prestaciones) {
+                	                    
+            	                            for (i = 0; i < data.especialidad.prestaciones; i++) {
+        	                                    var prestacion = especialidad.prestaciones[i]
+    	                                        prestacionesDiv.append('<label>' + prestacion.nombre + '</label><input type="checkbox" name="prestacion[' + i + ']" value="' + prestacion.nombre + '" /> ')
+	                                        }
 
+                                        }
                                     }
                                     var row = $(document.createElement('div')).attr("class", 'row');
 
@@ -610,7 +667,9 @@ var buscar = function() {
                                 editable: false,
 
 
-                                events: data.events
+                                events: data.events,
+                                color: 'yellow', 
+                                textColor: 'black' // an option!
 
                             })
                         }
@@ -623,3 +682,7 @@ var buscar = function() {
 
 //-->
 </script>
+
+<script src="@{'/public/javascripts/spectrum.js'}"></script>
+<link rel='stylesheet' href="@{'/public/stylesheets/spectrum.css'}" />
+

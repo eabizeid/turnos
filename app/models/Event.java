@@ -13,4 +13,5 @@ public class Event {
     public boolean allDay = false;
     public String color = "#3a87ad";
     public String border = "";
+    public String plazo = "";
 }

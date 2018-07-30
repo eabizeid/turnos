@@ -21,6 +21,8 @@ public class Paciente extends Model {
     @ManyToOne
     public ObraSocial obraSocial;
     public Boolean planObesidad;
+    public Boolean poMixto;
+    public Boolean exPo;
 
     @Override
     public String toString() {

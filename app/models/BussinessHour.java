@@ -15,7 +15,7 @@ public class BussinessHour {
         if (other == this) return true;
 
         if (other.start.compareTo(this.start) >= 0
-                && other.end.compareTo(this.end) <=0
+                && other.end.compareTo(this.end) < 0
                 && this.dow.contains(other.dow.get(0))) {
             return true;
         }

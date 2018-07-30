@@ -15,6 +15,7 @@ GET     /consultorios                           Organizador.index
 GET     /organizarhorarios                      Organizador.dispoForProfesional
 GET     /report                                 Scheduler.showReport
 GET     /news                                   News.index
+GET     /vencimientos                           Scheduler.vencimientos
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

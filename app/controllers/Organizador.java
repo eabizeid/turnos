@@ -12,8 +12,12 @@ import play.mvc.Controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 
 /**
  * Created by edu on 10/08/15.
@@ -165,7 +169,9 @@ public class Organizador extends Controller {
         if (dispoByProfesionalList != null && dispoByProfesionalList.size() != 0) {
             DisponibilidadPorProfesional byProfesional = (DisponibilidadPorProfesional) dispoByProfesionalList.get(0);
             renderArgs.put("dispoPorDia",byProfesional.disponibilidadPorDia);
-            renderArgs.put("specificDays", byProfesional.anSpecificDays);
+            List<String> specificDays = byProfesional.anSpecificDays;
+            Collections.sort(specificDays);
+            renderArgs.put("specificDays", specificDays);
         }
         render();
     }
@@ -204,11 +210,13 @@ public class Organizador extends Controller {
                 disponibilidadPorProfesional = new DisponibilidadPorProfesional();
                 disponibilidadPorProfesional.profesional = Profesional.findById(professionalId);
                 disponibilidadPorProfesional.anSpecificDays = anSpecificDays;
+                disponibilidadPorProfesional.disponibilidadPorDia = Lists.newArrayList();
                 disponibilidadPorProfesional.save();
 
             } else {
                 disponibilidadPorProfesional =  byProfesional.get(0);
                 disponibilidadPorProfesional.anSpecificDays.addAll(anSpecificDays);
+                disponibilidadPorProfesional.disponibilidadPorDia = Lists.newArrayList();
                 disponibilidadPorProfesional.save();
             }
         } else {
@@ -233,10 +241,12 @@ public class Organizador extends Controller {
                 disponibilidadPorProfesional = new DisponibilidadPorProfesional();
                 disponibilidadPorProfesional.profesional = Profesional.findById(professionalId);
                 disponibilidadPorProfesional.disponibilidadPorDia = byDays;
+                disponibilidadPorProfesional.anSpecificDays = Lists.newArrayList();
                 disponibilidadPorProfesional.save();
 
             } else {
                 disponibilidadPorProfesional = byProfesional.get(0);
+                disponibilidadPorProfesional.anSpecificDays = Lists.newArrayList();
                 for(DisponibilidadPorDia newDispo : byDays) {
                     boolean found = false;
                     for (DisponibilidadPorDia oldDispo : disponibilidadPorProfesional.disponibilidadPorDia){

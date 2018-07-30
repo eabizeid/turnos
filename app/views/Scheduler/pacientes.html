@@ -3,16 +3,20 @@
         $(document).ready(function() {
             $('#example').dataTable();
         } );
-    $("input:radio").click(function() {
-        var pacienteId = $('input:radio:checked').val();
-
-        $("#pacienteId").val(pacienteId)
-        var getPacienteAction = #{jsAction @paciente(':pacienteId') /}
-                $.post(getPacienteAction({pacienteId: pacienteId}), function (data) {
+    	$("input:radio").click(function() {
+        	var pacienteId = $('input:radio:checked').val();
+			var profesionalId = $("#profesional").val();
+	        $("#pacienteId").val(pacienteId)
+    	    var getPacienteAction = #{jsAction @paciente(':pacienteId', ':profesionalId') /}
+                $.post(getPacienteAction({pacienteId: pacienteId, profesionalId: profesionalId}), function (data) {
+                	console.log(data);
                     $("#paciente").val(data.apellido + ", " + data.nombres)
+                      #{if !tieneObraSocial}
+                    	$("#notaOS").show();
+                    #{/if}		
                     $('#AdminPacientes').modal('toggle');
                 })
-    })
+    	})
 </script>
 
 
@@ -28,7 +32,7 @@
                 <th>T. Pago</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody>s
             #{list items:pacientes, as: 'p'}
                 <tr>
                     <td><input type="radio" value="${p.id}" /> </td>

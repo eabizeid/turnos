@@ -17,6 +17,7 @@ import play.modules.pdf.PDF;
 import play.mvc.Before;
 import play.mvc.Controller;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -32,6 +33,13 @@ public class Scheduler extends Controller {
         List<Novedad> news  = Novedad.findAll();
         renderArgs.put("news", news);
     }
+    
+    public static void vencimientos () {
+    	List<Appointment> appointments = Appointment.find("byPlazoVencido", true).fetch();
+        render(appointments);
+    }
+    
+    
     public static void index() {
         renderArgs.put("profesionales", Profesional.find("order by apellido ASC").fetch());
         renderArgs.put("especialidades", Especialidad.find("order by descripcion ASC").fetch());
@@ -46,23 +54,27 @@ public class Scheduler extends Controller {
         renderJSON(profesionales);
     }
 
-    public static void organizador(Long professionalId, Long especialidadId) {
-        Profesional profesional = Profesional.findById(professionalId); Especialidad especialidad = Especialidad.findById(especialidadId);
+    public static void organizador(Long professionalId) {
+        Profesional profesional = Profesional.findById(professionalId);
 
         List<Event> events = Lists.newArrayList();
         if (profesional != null) {
-            List<models.Appointment> appointments = models.Appointment.find("byProfesionalAndEspecialidad", profesional, especialidad).fetch();
+            List<models.Appointment> appointments = models.Appointment.find("byProfesional", profesional).fetch();
             for (models.Appointment appointment : appointments ) {
                 Event event = new Event();
-                event.title = appointment.paciente.toString() + ", " + appointment.id;
-                String[] fechaSplitted = appointment.cita.fecha.split("-");
+                //paciente, practicas, si es particular, obrasocial, plazo de seña
+                event.title = String.format("%s - %s - %s - %s - %s", appointment.paciente.toString() + ", " + appointment.id, 
+                		(appointment.prestaciones != null) ? appointment.prestaciones : StringUtils.EMPTY, appointment.particular ? "PART" : "NO PART",  
+                				appointment.paciente.obraSocial != null ? appointment.paciente.obraSocial.nombre: "SIN OS", "plazo: " + appointment.plazoSeña);
+                String[] fechaSplitted = appointment.cita.fecha.split("-"); 
                 String fecha = fechaSplitted[2] + "-" + fechaSplitted[1] + "-" + fechaSplitted[0];
                 event.start = fecha + "T" + appointment.cita.hora + ":00";
                 event.end = fecha + "T" + appointment.cita.hora + ":00";
                 String[] hourSplitted = appointment.cita.hora.split(":");
-                event.color = appointment.color;
+                event.color = (appointment.color != StringUtils.EMPTY) ? appointment.color : "rgb(246, 178, 107)";
                 event.border = appointment.border;
                 event.description = (appointment.advance != null) ? appointment.advance : StringUtils.EMPTY;
+                event.plazo = appointment.plazoSeña; 
                 events.add(event);
             }
 
@@ -82,7 +94,6 @@ public class Scheduler extends Controller {
         SchedulerResponse response = new SchedulerResponse();
         response.events = events;
         response.profesional = profesional;
-        response.especialidad = especialidad;
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm").create();
         renderJSON(gson.toJson(response));
@@ -90,10 +101,9 @@ public class Scheduler extends Controller {
 
 
     public static void addAppointment(Long professionalId, Long especialidadId, Long pacienteId, String fecha,
-                                      String hora, Boolean st, String advance, String prestaciones) {
+                                      String hora, Boolean st, String advance, String plazo, String prestaciones, String notaOS, String color) {
 
         Profesional profesional = Profesional.findById(professionalId);
-        Especialidad especialidad = Especialidad.findById(especialidadId);
         models.Appointment appointment = new models.Appointment();
         appointment.cita = cita(fecha, hora);
         appointment.paciente = Paciente.findById(pacienteId);
@@ -101,14 +111,13 @@ public class Scheduler extends Controller {
         appointment.sobreturno = (st != null) ? st : false;
         if ( st!= null && st )
             appointment.border = "red";
-
-        if (appointment.paciente.planObesidad) {
-            appointment.color = "#99FF66";
-        }
-        appointment.especialidad = especialidad;
+        if (!color.isEmpty())
+        	appointment.color = color;
+        
         appointment.advance = advance;
-
+        appointment.plazoSeña = plazo;
         appointment.prestaciones = prestaciones;
+        appointment.notaOS = notaOS;
         appointment.save();
         renderJSON(appointment);
     }
@@ -128,8 +137,13 @@ public class Scheduler extends Controller {
         render();
     }
 
-    public static void paciente(Long pacienteId) {
-        renderJSON(Paciente.findById(pacienteId));
+    public static void paciente(Long pacienteId, Long profesionalId) {
+    	Paciente paciente = Paciente.findById(pacienteId);
+    	Profesional profesional = Profesional.findById(profesionalId);
+    	
+    	Boolean tieneObraSocial = profesional.obraSociales.contains(paciente.obraSocial);
+    	renderArgs.put("tieneObraSocial", tieneObraSocial);
+    	renderJSON(paciente);
 
     }
 
@@ -141,7 +155,10 @@ public class Scheduler extends Controller {
         if (!byProfesional.isEmpty()) {
             DisponibilidadPorProfesional byProfesional1 = byProfesional.get(0);
             if (!byProfesional1.anSpecificDays.isEmpty()) {
-                availableDaysResponse.anSpecificDays = byProfesional1.anSpecificDays;
+            	
+                List<String> specificDays = byProfesional1.anSpecificDays;
+                Collections.sort(specificDays);
+                availableDaysResponse.anSpecificDays = specificDays;
                 availableDaysResponse.withAnSpecificDays = true;
             } else {
                 bussinessHours = searchDispo(month, byProfesional1);
@@ -160,7 +177,7 @@ public class Scheduler extends Controller {
     }
 
     public static void report(String date) {
-        List<models.Appointment> appointments = models.Appointment.find("cita.fecha = ? order by especialidad.descripcion ASC, profesional.apellido ASC, profesional.nombre ASC", date).fetch();
+        List<models.Appointment> appointments = models.Appointment.find("cita.fecha = ? order by profesional.apellido ASC, profesional.nombre ASC", date).fetch();
 
         render(appointments);
     }
