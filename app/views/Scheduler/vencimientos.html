@@ -1,0 +1,42 @@
+#{extends 'main.html' /}
+#{set title:'CIMA' /}
+
+<div id="teaser">
+  <div class="wrap">
+    <div id="image"></div>
+    <div class="box">
+      <h2><em >Señas Vencidas</em></h2>
+      <p>En esta sección podrá visualizar los turnos a los cuales se les vencio el plazo para traer la seña</p>
+    </div>
+  </div>
+</div>
+
+#{if appointments != null && appointments.size()>0}
+<div class="wrap container">
+    <h3>Plazos <span class="red">vencidos</span></h3>
+    <table id="results" class="table table-striped">
+        <thead>
+        <tr>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            #{list items:appointments, as:'n'}
+            <tr>
+                <td>${n.paciente.apellido}, ${n.paciente.nombres}</td>
+                <td>${n.cita.fecha}, ${n.cita.hora}</td>
+                <td>${n.profesional.apellido}, ${n.profesional.nombre}</td>
+
+            </tr>
+            #{/list}
+        </tbody>
+    </table>
+</div>
+#{/if}
+#{else}
+<div class="wrap container">
+    <p>No turnos con señas vencidas</p>
+</div>
+#{/else}
+
+
